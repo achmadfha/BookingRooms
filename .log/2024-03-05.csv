@@ -1,0 +1,3 @@
+{"level":"info","time":"05-03-2024 15:04:29","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 15:04:29","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 15:04:29","caller":"D:/enigmacamp/Final-Project/app/app.go:144","message":"Service running versions 0.0.1"}

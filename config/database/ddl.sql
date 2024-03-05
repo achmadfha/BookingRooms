@@ -40,13 +40,25 @@ CREATE TABLE transactions
     transaction_id UUID PRIMARY KEY,
     employee_id    UUID,
     room_id        UUID,
-    start_date     DATE,
-    end_date       DATE,
-    description    VARCHAR(250),
-    status         transaction_status,
+    start_date     DATE NOT NULL,
+    end_date       DATE NOT NULL,
+    description    VARCHAR(250) NOT NULL,
+    status         transaction_status DEFAULT 'PENDING', -- Defaulting to PENDING
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES employee (employee_id),
     FOREIGN KEY (room_id) REFERENCES room (room_id)
 );
 
+CREATE TABLE transaction_logs
+(
+    transaction_log_id UUID PRIMARY KEY,
+    transaction_id UUID,
+    approved_by UUID,
+    approval_status transaction_status, -- Defaulting to PENDING
+    description varchar(100), -- description for reject or accept
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (transaction_id) REFERENCES transactions (transaction_id),
+    FOREIGN KEY (approved_by) REFERENCES employee (employee_id)
+);
