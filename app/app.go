@@ -8,6 +8,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
@@ -15,9 +19,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
-	"os"
-	"strconv"
-	"time"
 )
 
 func initEnv() (dto.ConfigData, error) {

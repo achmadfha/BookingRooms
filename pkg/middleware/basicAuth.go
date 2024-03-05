@@ -2,8 +2,9 @@ package middleware
 
 import (
 	"BookingRoom/model/dto/json"
-	"github.com/gin-gonic/gin"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func BasicAuth(c *gin.Context) {

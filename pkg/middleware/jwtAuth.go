@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"BookingRoom/model/dto/json"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func JWTAuth(roles ...string) gin.HandlerFunc {
