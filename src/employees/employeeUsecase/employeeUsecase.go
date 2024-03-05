@@ -2,7 +2,10 @@ package employeeUsecase
 
 import (
 	"BookingRoom/model/dto"
+	"BookingRoom/pkg/utils"
 	"BookingRoom/src/employees"
+	"errors"
+	"fmt"
 )
 
 type employeeUC struct {
@@ -13,11 +16,24 @@ func NewEmployeeUsecase(employeeRepo employees.EmployeeRepository) employees.Emp
 	return &employeeUC{employeeRepo}
 }
 
-func (e *employeeUC) GetLogin(username string) (dto.Employees, error) {
-	employees, err := e.employeeRepo.GetLogin(username)
+func (e *employeeUC) Login(employees dto.LoginRequest) (token string, err error) {
+	emp, err := e.employeeRepo.RetrieveEmployees(employees.Username)
 	if err != nil {
-		return dto.Employees{}, err
+		fmt.Println("Error Usecase > repo: ", err.Error())
+		if err.Error() == "no rows" {
+			return "", errors.New("01")
+		}
+		return "", err
 	}
 
-	return employees, err
+	if err = utils.VerifyPassword(emp.Password, employees.Password); err != nil {
+		return "", errors.New("02")
+	}
+
+	token, err = utils.GenerateToken(emp.EmployeeId, string(emp.Position))
+	if err != nil {
+		return "", err
+	}
+
+	return token, err
 }

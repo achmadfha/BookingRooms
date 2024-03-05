@@ -4,12 +4,9 @@ import (
 	"BookingRoom/model/dto"
 	"BookingRoom/model/dto/json"
 	"BookingRoom/pkg/middleware"
-	"BookingRoom/pkg/utils"
 	"BookingRoom/src/employees"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type employeeDelivery struct {
@@ -33,29 +30,29 @@ func NewEmployeeDelivery(v1Group *gin.RouterGroup, employeeUC employees.Employee
 }
 
 func (e *employeeDelivery) getLogin(ctx *gin.Context) {
-	var req dto.Employees
+	var req dto.LoginRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		json.NewResponseBadRequest(ctx, []json.ValidationField{}, err.Error(), "01", "01")
+		detail := json.ValidationField{FieldName: "Login", Message: err.Error()}
+		listError := []json.ValidationField{detail}
+		json.NewResponseBadRequest(ctx, listError, "Bad Request", "01", "01")
 		return
 	}
 
-	employee, err := e.employeeUC.GetLogin(req.Username)
+	token, err := e.employeeUC.Login(req)
 	if err != nil {
-		fmt.Println("err Delivery :", err.Error())
-		json.NewResponseBadRequest(ctx, []json.ValidationField{}, "Invalid username or password", "01", "01")
+		if err.Error() == "01" {
+			json.NewResponseBadRequest(ctx, nil, "employee doesn't exists on our record", "01", "02")
+			return
+		}
+		if err.Error() == "02" {
+			json.NewResponseBadRequest(ctx, nil, "Unauthorized username and password didn't match", "01", "02")
+			return
+		}
+		json.NewResponseError(ctx, err.Error(), "01", "02")
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(employee.Password), []byte(req.Password))
-	if err != nil {
-		json.NewResponseBadRequest(ctx, []json.ValidationField{}, "Invalid hash password", "01", "01")
-		return
-	}
+	data := interface{}(map[string]interface{}{"access_token": token})
 
-	token, err := utils.GenerateToken(employee.EmployeeId, employee.Position)
-	if err != nil {
-		json.NewResponseError(ctx, err.Error(), "01", "01")
-	}
-
-	json.NewResponseSuccess(ctx, token, nil, "success", "01", "01")
+	json.NewResponseSuccess(ctx, data, nil, "success", "01", "01")
 }
