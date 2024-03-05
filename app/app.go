@@ -74,6 +74,11 @@ func initEnv() (dto.ConfigData, error) {
 }
 
 func RunService() {
+	// Create log file
+	if err := createLogFile(); err != nil {
+		log.Fatal().Msg("Error creating log file: " + err.Error())
+	}
+
 	//add log
 	zerolog.TimeFieldFormat = "02-01-2006 15:04:05"
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
@@ -151,4 +156,26 @@ func initializeDomainModule(r *gin.Engine, db *sql.DB) {
 	v1Group := apiGroup.Group("/v1")
 
 	router.InitRouter(v1Group, db)
+}
+
+func createLogFile() error {
+	dir := "./.log/"
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			return err
+		}
+	}
+
+	today := time.Now().Format("2006-01-02")
+
+	file, err := os.OpenFile(dir+today+".csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		return err
+	}
+
+	multi := zerolog.MultiLevelWriter(zerolog.ConsoleWriter{Out: os.Stdout}, file)
+	log.Logger = zerolog.New(multi).With().Timestamp().Logger()
+
+	return nil
 }
