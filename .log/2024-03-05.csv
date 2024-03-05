@@ -1,3 +1,21 @@
 {"level":"info","time":"05-03-2024 15:04:29","message":"Try connect to database..."}
 {"level":"info","time":"05-03-2024 15:04:29","message":"Database connected successfully"}
 {"level":"info","time":"05-03-2024 15:04:29","caller":"D:/enigmacamp/Final-Project/app/app.go:144","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 16:16:36","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 16:16:36","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 16:16:36","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 17:23:40","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 17:23:41","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 17:23:41","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 17:28:43","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 17:28:43","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 17:28:43","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 17:31:43","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 17:31:43","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 17:31:43","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 17:32:27","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 17:32:27","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 17:32:27","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"05-03-2024 17:35:11","message":"Try connect to database..."}
+{"level":"info","time":"05-03-2024 17:35:11","message":"Database connected successfully"}
+{"level":"info","time":"05-03-2024 17:35:11","caller":"C:/Users/acer/Documents/Enigma-Camp/Batch-19/Final-Project/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
