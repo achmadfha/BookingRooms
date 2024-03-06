@@ -138,6 +138,7 @@ func RunService() {
 
 	//gin recovery for handle panic
 	r.Use(gin.Recovery())
+	r.Use(RequestLog())
 	initializeDomainModule(r, conn)
 
 	version := "0.0.1"
@@ -168,7 +169,7 @@ func createLogFile() error {
 
 	today := time.Now().Format("2006-01-02")
 
-	file, err := os.OpenFile(dir+today+".csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile(dir+today+".json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		return err
 	}
@@ -177,4 +178,23 @@ func createLogFile() error {
 	log.Logger = zerolog.New(multi).With().Timestamp().Logger()
 
 	return nil
+}
+
+func RequestLog() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+		end := time.Now()
+		latency := end.Sub(start)
+
+		log.Info().
+			Int("status", c.Writer.Status()).
+			Str("method", c.Request.Method).
+			Str("path", c.Request.URL.Path).
+			Str("ip", c.ClientIP()).
+			Dur("latency", latency).
+			Str("user_agent", c.Request.UserAgent()).
+			Int("body_size", c.Writer.Size()).
+			Msg("Request")
+	}
 }

@@ -125,7 +125,6 @@ WHERE
 		return transactionsDto.TransactionsDetailResponse{}, err
 	}
 
-	fmt.Println(trxDetails)
 	return trxDetails, nil
 }
 
