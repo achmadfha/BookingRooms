@@ -2,10 +2,7 @@ package employeeUsecase
 
 import (
 	"BookingRoom/model/dto"
-	"BookingRoom/pkg/utils"
 	"BookingRoom/src/employees"
-	"errors"
-	"fmt"
 )
 
 type employeeUC struct {
@@ -16,24 +13,52 @@ func NewEmployeeUsecase(employeeRepo employees.EmployeeRepository) employees.Emp
 	return &employeeUC{employeeRepo}
 }
 
-func (e *employeeUC) Login(employees dto.LoginRequest) (token string, err error) {
-	emp, err := e.employeeRepo.RetrieveEmployees(employees.Username)
+func (e *employeeUC) GetEmployee() ([]dto.Employees, error) {
+	employee, err := e.employeeRepo.RetrieveEmployee()
 	if err != nil {
-		fmt.Println("Error Usecase > repo: ", err.Error())
-		if err.Error() == "no rows" {
-			return "", errors.New("01")
-		}
-		return "", err
+		return nil, err
 	}
 
-	if err = utils.VerifyPassword(emp.Password, employees.Password); err != nil {
-		return "", errors.New("02")
-	}
+	return employee, nil
+}
 
-	token, err = utils.GenerateToken(emp.EmployeeId, string(emp.Position))
+func (e *employeeUC) GetEmployeeById(id string) (dto.Employees, error) {
+	employee, err := e.employeeRepo.RetrieveEmployeeById(id)
 	if err != nil {
-		return "", err
+		return dto.Employees{}, err
 	}
 
-	return token, err
+	return employee, nil
+}
+
+func (e *employeeUC) StoreEmployee(employee *dto.Employees) error {
+	err := e.employeeRepo.CreateEmployees(employee)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *employeeUC) UpdateEmployee(employee dto.Employees) error {
+
+	// Validasi
+
+	err := e.employeeRepo.RenewEmployee(employee)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *employeeUC) DeleteEmployeeById(id string) error {
+	// Validasi id jika diperlukan
+
+	err := e.employeeRepo.RemoveEmployeeById(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -3,10 +3,10 @@ package employeeDelivery
 import (
 	"BookingRoom/model/dto"
 	"BookingRoom/model/dto/json"
-	"BookingRoom/pkg/middleware"
 	"BookingRoom/src/employees"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type employeeDelivery struct {
@@ -20,39 +20,83 @@ func NewEmployeeDelivery(v1Group *gin.RouterGroup, employeeUC employees.Employee
 
 	employeeGroup := v1Group.Group("/employees")
 	{
-		employeeGroup.POST("/login", middleware.BasicAuth, handler.getLogin)
-		employeeGroup.GET("/", middleware.JWTAuth("ADMIN", "GA"))
-		employeeGroup.POST("/", middleware.JWTAuth("ADMIN", "GA"))
-		employeeGroup.GET("/:id", middleware.JWTAuth("ADMIN", "GA"))
-		employeeGroup.PUT("/:id", middleware.JWTAuth("ADMIN", "GA"))
-		employeeGroup.DELETE("/:id", middleware.JWTAuth("GA"))
+		employeeGroup.GET("/", handler.getEmployee)
+		employeeGroup.GET("/:id", handler.getEmployeeById)
+		employeeGroup.POST("/", handler.createEmployee)
+		employeeGroup.PUT("/:id", handler.updateEmployee)
+		employeeGroup.DELETE("/:id", handler.deleteEmployee)
 	}
 }
 
-func (e *employeeDelivery) getLogin(ctx *gin.Context) {
-	var req dto.LoginRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		detail := json.ValidationField{FieldName: "Login", Message: err.Error()}
-		listError := []json.ValidationField{detail}
-		json.NewResponseBadRequest(ctx, listError, "Bad Request", "01", "01")
-		return
-	}
-
-	token, err := e.employeeUC.Login(req)
+func (e *employeeDelivery) getEmployee(ctx *gin.Context) {
+	employee, err := e.employeeUC.GetEmployee()
 	if err != nil {
-		if err.Error() == "01" {
-			json.NewResponseBadRequest(ctx, nil, "employee doesn't exists on our record", "01", "02")
-			return
-		}
-		if err.Error() == "02" {
-			json.NewResponseBadRequest(ctx, nil, "Unauthorized username and password didn't match", "01", "02")
-			return
-		}
-		json.NewResponseError(ctx, err.Error(), "01", "02")
+		json.NewResponseError(ctx, err.Error(), "02", "02")
 		return
 	}
 
-	data := interface{}(map[string]interface{}{"access_token": token})
+	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+}
 
-	json.NewResponseSuccess(ctx, data, nil, "success", "01", "01")
+func (e *employeeDelivery) getEmployeeById(ctx *gin.Context) {
+	employeeId := ctx.Param("id")
+
+	employee, err := e.employeeUC.GetEmployeeById(employeeId)
+	if err != nil {
+		json.NewResponseError(ctx, err.Error(), "01", "01")
+		return
+	}
+
+	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+}
+
+func (e *employeeDelivery) createEmployee(ctx *gin.Context) {
+	var employee dto.Employees
+
+	if err := ctx.ShouldBindJSON(&employee); err != nil {
+		json.NewResponseBadRequest(ctx, []json.ValidationField{}, err.Error(), "01", "01")
+		return
+	}
+
+	if err := e.employeeUC.StoreEmployee(&employee); err != nil {
+		json.NewResponseError(ctx, err.Error(), "01", "01")
+		return
+	}
+
+	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+}
+
+func (e *employeeDelivery) updateEmployee(ctx *gin.Context) {
+	employeeIdString := ctx.Param("id")
+	employeeId, err := uuid.Parse(employeeIdString)
+	if err != nil {
+		json.NewResponseError(ctx, err.Error(), "01", "01")
+		return
+	}
+
+	var employee dto.Employees
+	if err := ctx.ShouldBindJSON(&employee); err != nil {
+		json.NewResponseBadRequest(ctx, []json.ValidationField{}, err.Error(), "01", "01")
+		return
+	}
+
+	employee.EmployeeId = employeeId
+
+	if err := e.employeeUC.UpdateEmployee(employee); err != nil {
+		json.NewResponseError(ctx, err.Error(), "01", "01")
+		return
+	}
+
+	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+}
+
+func (e *employeeDelivery) deleteEmployee(ctx *gin.Context) {
+	employeeId := ctx.Param("id")
+
+	if err := e.employeeUC.DeleteEmployeeById(employeeId); err != nil {
+		json.NewResponseError(ctx, err.Error(), "01", "01")
+		return
+	}
+
+	json.NewResponseSuccess(ctx, "OK", nil, "success", "01", "01")
 }
