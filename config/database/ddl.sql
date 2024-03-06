@@ -43,7 +43,7 @@ CREATE TABLE transactions
     start_date     DATE NOT NULL,
     end_date       DATE NOT NULL,
     description    VARCHAR(250) NOT NULL,
-    status         transaction_status DEFAULT 'PENDING', -- Defaulting to PENDING
+    status         transaction_status DEFAULT 'PENDING',
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES employee (employee_id),
