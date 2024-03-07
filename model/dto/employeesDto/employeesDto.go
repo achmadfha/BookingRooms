@@ -66,12 +66,6 @@ func ValidationEmployee(employee Employees) []json.ValidationField {
 			Message:   "is required.",
 		})
 	}
-	if employee.Username == "" {
-		valError = append(valError, json.ValidationField{
-			FieldName: "Username",
-			Message:   "is required.",
-		})
-	}
 
 	return valError
 }

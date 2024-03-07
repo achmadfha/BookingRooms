@@ -5,7 +5,6 @@ import (
 	"BookingRoom/pkg/utils"
 	"BookingRoom/src/auth"
 	"errors"
-	"fmt"
 )
 
 type authUC struct {
@@ -19,11 +18,7 @@ func NewAuthUsecase(authRepo auth.AuthRepository) auth.AuthUsecase {
 func (e *authUC) Login(employees employeesDto.LoginRequest) (token string, err error) {
 	emp, err := e.authRepo.RetrieveEmployees(employees.Username)
 	if err != nil {
-		fmt.Println("Error Usecase > repo: ", err.Error())
-		if err.Error() == "no rows" {
-			return "", errors.New("01")
-		}
-		return "", err
+		return "", errors.New("01")
 	}
 
 	if err = utils.VerifyPassword(emp.Password, employees.Password); err != nil {
@@ -32,7 +27,7 @@ func (e *authUC) Login(employees employeesDto.LoginRequest) (token string, err e
 
 	token, err = utils.GenerateToken(emp.EmployeeId, string(emp.Position))
 	if err != nil {
-		return "", err
+		return "", errors.New("03")
 	}
 
 	return token, err

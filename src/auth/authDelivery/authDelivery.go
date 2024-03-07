@@ -24,10 +24,11 @@ func NewAuthDelivery(v1Group *gin.RouterGroup, authUC auth.AuthUsecase) {
 func (e *authDelivery) getLogin(ctx *gin.Context) {
 	var req employeesDto.LoginRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		detail := json.ValidationField{FieldName: "Login", Message: err.Error()}
-		listError := []json.ValidationField{detail}
-		json.NewResponseBadRequest(ctx, listError, "Bad Request", "01", "01")
-		return
+		valErr := employeesDto.ValidationLogin(req)
+		if len(valErr) > 0 {
+			json.NewResponseBadRequest(ctx, valErr, "Bad Request", "01", "01")
+			return
+		}
 	}
 
 	token, err := e.authUC.Login(req)
@@ -40,11 +41,15 @@ func (e *authDelivery) getLogin(ctx *gin.Context) {
 			json.NewResponseBadRequest(ctx, nil, "Unauthorized username and password didn't match", "01", "02")
 			return
 		}
+		if err.Error() == "03" {
+			json.NewResponseBadRequest(ctx, nil, "Invalid Token Access", "01", "02")
+			return
+		}
 		json.NewResponseError(ctx, err.Error(), "01", "02")
 		return
 	}
 
 	data := interface{}(map[string]interface{}{"access_token": token})
 
-	json.NewResponseSuccess(ctx, data, nil, "success", "01", "01")
+	json.NewResponseSuccess(ctx, data, nil, "success", "01", "03")
 }

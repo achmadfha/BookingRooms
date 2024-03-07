@@ -4,6 +4,7 @@ import (
 	"BookingRoom/model/dto/employeesDto"
 	"BookingRoom/model/dto/json"
 	"BookingRoom/src/employees"
+	"math"
 	"strconv"
 )
 
@@ -45,9 +46,18 @@ func (e *employeeUC) GetEmployee(page, size string) (employee []employeesDto.Emp
 		return nil, nil, err
 	}
 
+	totalPages := int(math.Ceil(float64(totalData) / float64(sizeInt)))
+	if pageInt > totalPages {
+		return nil, json.Pagination{}, err
+	}
+
+	if totalPages == 0 && totalData > 0 {
+		totalPages = 1
+	}
+
 	pagination = json.Pagination{
 		CurrentPage:  pageInt,
-		TotalPages:   totalData,
+		TotalPages:   totalPages,
 		TotalRecords: totalData,
 	}
 
@@ -75,8 +85,12 @@ func (e *employeeUC) StoreEmployee(employee *employeesDto.Employees) error {
 func (e *employeeUC) UpdateEmployee(employee employeesDto.Employees) error {
 
 	// Validasi
+	_, err := e.employeeRepo.RetrieveEmployeeById(employee.EmployeeId.String())
+	if err != nil {
+		return err
+	}
 
-	err := e.employeeRepo.RenewEmployee(employee)
+	err = e.employeeRepo.RenewEmployee(employee)
 	if err != nil {
 		return err
 	}
@@ -87,7 +101,12 @@ func (e *employeeUC) UpdateEmployee(employee employeesDto.Employees) error {
 func (e *employeeUC) DeleteEmployeeById(id string) error {
 	// Validasi id jika diperlukan
 
-	err := e.employeeRepo.RemoveEmployeeById(id)
+	_, err := e.employeeRepo.RetrieveEmployeeById(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepo.RemoveEmployeeById(id)
 	if err != nil {
 		return err
 	}

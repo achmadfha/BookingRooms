@@ -24,7 +24,7 @@ func (e *employeeRepository) RetrieveEmployee() ([]employeesDto.Employees, error
 	query := "SELECT employee_id, full_name, division, phone_number, position FROM employee"
 	rows, err := e.db.Query(query)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("1")
 	}
 	defer rows.Close()
 
