@@ -50,12 +50,10 @@ func NewResponseSuccess(c *gin.Context, result interface{}, pagination interface
 	})
 }
 
-func NewResponseCreatedSuccess(c *gin.Context, result interface{}, pagination interface{}, message, serviceCode, responseCode string) {
+func NewResponseCreatedSuccess(c *gin.Context, message, serviceCode, responseCode string) {
 	c.JSON(http.StatusCreated, jsonResponse{
 		Code:    "201" + serviceCode + responseCode,
 		Message: message,
-		Data:    result,
-		Paging:  pagination,
 	})
 }
 

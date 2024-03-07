@@ -16,15 +16,6 @@ CREATE TABLE employee
 );
 
 -- Table for room details
-CREATE TABLE room_details
-(
-    room_details_id UUID PRIMARY KEY,
-    room_type       VARCHAR(250),
-    capacity        INTEGER,
-    facility        TEXT[]
-);
-
--- Table for room data
 CREATE TABLE room
 (
     room_id         UUID PRIMARY KEY,
@@ -32,6 +23,15 @@ CREATE TABLE room
     name            VARCHAR(250),
     status          room_status,
     FOREIGN KEY (room_details_id) REFERENCES room_details (room_details_id)
+);
+
+-- Table for room data
+CREATE TABLE room_details
+(
+    room_details_id UUID PRIMARY KEY,
+    room_type       VARCHAR(250),
+    capacity        INTEGER,
+    facility        TEXT[]
 );
 
 -- Table for transactions
@@ -43,7 +43,7 @@ CREATE TABLE transactions
     start_date     DATE NOT NULL,
     end_date       DATE NOT NULL,
     description    VARCHAR(250) NOT NULL,
-    status         transaction_status DEFAULT 'PENDING', -- Defaulting to PENDING
+    status         transaction_status DEFAULT 'PENDING',
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES employee (employee_id),

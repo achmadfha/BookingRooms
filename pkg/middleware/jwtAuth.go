@@ -16,7 +16,7 @@ func JWTAuth(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if !strings.Contains(authHeader, "Bearer") {
-			json.NewResponseUnauthorized(c, "Invalid Token", "00", "00")
+			json.NewResponseUnauthorized(c, "Invalid Token", "00", "01")
 			c.Abort()
 			return
 		}
@@ -26,21 +26,21 @@ func JWTAuth(roles ...string) gin.HandlerFunc {
 			return []byte(secret), nil
 		})
 		if err != nil {
-			json.NewResponseUnauthorized(c, "Invalid Token", "00", "00")
+			json.NewResponseUnauthorized(c, "Invalid Token", "00", "02")
 			c.Abort()
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok || !token.Valid {
-			json.NewResponseUnauthorized(c, "Invalid Token", "00", "00")
+			json.NewResponseUnauthorized(c, "Invalid Token", "00", "03")
 			c.Abort()
 			return
 		}
 
 		expirationTime := int64(claims["expired"].(float64))
 		if time.Now().Unix() > expirationTime {
-			json.NewResponseUnauthorized(c, "Token Expired", "00", "00")
+			json.NewResponseUnauthorized(c, "Token Expired", "00", "05")
 			c.Abort()
 			return
 		}
@@ -56,7 +56,7 @@ func JWTAuth(roles ...string) gin.HandlerFunc {
 		}
 
 		if !validRole {
-			json.NewResponseForbidden(c, "Forbidden", "00", "00")
+			json.NewResponseForbidden(c, "Forbidden", "00", "06")
 			c.Abort()
 			return
 		}
