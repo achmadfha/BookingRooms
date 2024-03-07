@@ -59,8 +59,22 @@ func (t transactionsUC) RetrieveAllTransactions(page int, pageSize int, startDat
 			continue
 		}
 
+		createdAt, err := time.Parse(time.RFC3339Nano, transactionsData[i].CreatedAt)
+		if err != nil {
+			fmt.Println("Error parsing createdAt:", err)
+			continue
+		}
+
+		updatedAt, err := time.Parse(time.RFC3339Nano, transactionsData[i].UpdatedAt)
+		if err != nil {
+			fmt.Println("Error parsing updatedAt:", err)
+			continue
+		}
+
 		transactionsData[i].StartDate = startDate.Format("01-02-2006")
 		transactionsData[i].EndDate = endDate.Format("01-02-2006")
+		transactionsData[i].CreatedAt = createdAt.Format("02-01-2006 15:04:05")
+		transactionsData[i].UpdatedAt = updatedAt.Format("02-01-2006 15:04:05")
 	}
 
 	totalTransactionsRows, err := t.transactionsRepository.CountAllTransactions(startDate, endDate)
@@ -98,9 +112,13 @@ func (t transactionsUC) RetrieveTransactionsByID(trxID string) (transactionsDto.
 
 	startDate, err := time.Parse(time.RFC3339, trxData.StartDate)
 	endDate, err := time.Parse(time.RFC3339, trxData.EndDate)
+	createdAt, err := time.Parse(time.RFC3339Nano, trxData.CreatedAt)
+	updatedAt, err := time.Parse(time.RFC3339Nano, trxData.UpdatedAt)
 
 	trxData.StartDate = startDate.Format("01-02-2006")
 	trxData.EndDate = endDate.Format("01-02-2006")
+	trxData.CreatedAt = createdAt.Format("02-01-2006 15:04:05")
+	trxData.UpdatedAt = updatedAt.Format("02-01-2006 15:04:05")
 
 	return trxData, err
 }

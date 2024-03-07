@@ -2,7 +2,6 @@ package transactionsDto
 
 import (
 	"github.com/google/uuid"
-	"time"
 )
 
 type (
@@ -14,8 +13,8 @@ type (
 		EndDate     string    `json:"end_date"`
 		Description string    `json:"description"`
 		Status      string    `json:"status"`
-		CreatedAt   time.Time `json:"created_at"`
-		UpdatedAt   time.Time `json:"updated_at,omitempty"`
+		CreatedAt   string    `json:"created_at"`
+		UpdatedAt   string    `json:"updated_at,omitempty"`
 	}
 
 	TransactionsRequest struct {
@@ -45,8 +44,8 @@ type (
 		EndDate     string          `json:"end_date"`
 		Description string          `json:"description"`
 		Status      string          `json:"status"`
-		CreatedAt   time.Time       `json:"created_at"`
-		UpdatedAt   time.Time       `json:"updated_at"`
+		CreatedAt   string          `json:"created_at"`
+		UpdatedAt   string          `json:"updated_at"`
 	}
 
 	EmployeeDetails struct {
