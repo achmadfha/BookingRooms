@@ -25,7 +25,7 @@ func (e *authRepository) RetrieveEmployees(username string) (employeesDto.Employ
 }
 
 func (e *authRepository) RenewPassword(username, password string) error {
-	query := "UPDATE employee SET password=$1 WHERE username=$1"
+	query := "UPDATE employee SET password=$1 WHERE username=$2"
 	_, err := e.db.Exec(query, password, username)
 	return err
 }

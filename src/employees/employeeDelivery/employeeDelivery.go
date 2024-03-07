@@ -4,6 +4,7 @@ import (
 	"BookingRoom/model/dto/employeesDto"
 	"BookingRoom/model/dto/json"
 	"BookingRoom/pkg/middleware"
+	"BookingRoom/pkg/utils"
 	"BookingRoom/src/employees"
 
 	"github.com/gin-gonic/gin"
@@ -69,7 +70,7 @@ func (e *employeeDelivery) createEmployee(ctx *gin.Context) {
 		return
 	}
 
-	valError := employeesDto.ValidationEmployee(employee)
+	valError := utils.ValidationEmployee(employee)
 	if len(valError) > 0 {
 		json.NewResponseBadRequest(ctx, valError, "failed", "01", "01")
 		return

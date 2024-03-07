@@ -9,5 +9,5 @@ type AuthRepository interface {
 
 type AuthUsecase interface {
 	Login(employee employeesDto.LoginRequest) (token string, err error)
-	UpdatePassword(employee employeesDto.Employees) error
+	UpdatePassword(employee employeesDto.PasswordRequest) error
 }
