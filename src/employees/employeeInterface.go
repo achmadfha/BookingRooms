@@ -1,19 +1,20 @@
 package employees
 
-import "BookingRoom/model/dto"
+import "BookingRoom/model/dto/employeesDto"
 
 type EmployeeRepository interface {
-	RetrieveEmployee() ([]dto.Employees, error)
-	RetrieveEmployeeById(id string) (dto.Employees, error)
-	CreateEmployees(employee *dto.Employees) error
-	RenewEmployee(employee dto.Employees) error
+	RetrieveEmployee() ([]employeesDto.Employees, error)
+	RetrieveEmployeeById(id string) (employeesDto.Employees, error)
+	CreateEmployees(employee *employeesDto.Employees) error
+	RenewEmployee(employee employeesDto.Employees) error
 	RemoveEmployeeById(id string) error
+	CountEmployees(page, size int) (int, error)
 }
 
 type EmployeeUsecase interface {
-	GetEmployee() ([]dto.Employees, error)
-	GetEmployeeById(id string) (dto.Employees, error)
-	StoreEmployee(employee *dto.Employees) error
-	UpdateEmployee(employee dto.Employees) error
+	GetEmployee(page, size string) (employee []employeesDto.Employees, pagination interface{}, err error)
+	GetEmployeeById(id string) (employeesDto.Employees, error)
+	StoreEmployee(employee *employeesDto.Employees) error
+	UpdateEmployee(employee employeesDto.Employees) error
 	DeleteEmployeeById(id string) error
 }

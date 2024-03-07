@@ -1,11 +1,11 @@
 package auth
 
-import "BookingRoom/model/dto"
+import "BookingRoom/model/dto/employeesDto"
 
 type AuthRepository interface {
-	RetrieveEmployees(username string) (dto.Employees, error)
+	RetrieveEmployees(username string) (employeesDto.Employees, error)
 }
 
 type AuthUsecase interface {
-	Login(employee dto.LoginRequest) (token string, err error)
+	Login(employee employeesDto.LoginRequest) (token string, err error)
 }

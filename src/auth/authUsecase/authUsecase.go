@@ -1,7 +1,7 @@
 package authUsecase
 
 import (
-	"BookingRoom/model/dto"
+	"BookingRoom/model/dto/employeesDto"
 	"BookingRoom/pkg/utils"
 	"BookingRoom/src/auth"
 	"errors"
@@ -16,7 +16,7 @@ func NewAuthUsecase(authRepo auth.AuthRepository) auth.AuthUsecase {
 	return &authUC{authRepo}
 }
 
-func (e *authUC) Login(employees dto.LoginRequest) (token string, err error) {
+func (e *authUC) Login(employees employeesDto.LoginRequest) (token string, err error) {
 	emp, err := e.authRepo.RetrieveEmployees(employees.Username)
 	if err != nil {
 		fmt.Println("Error Usecase > repo: ", err.Error())

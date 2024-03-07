@@ -38,7 +38,7 @@ func JWTAuth(roles ...string) gin.HandlerFunc {
 			return
 		}
 
-		expirationTime := int64(claims["exp"].(float64))
+		expirationTime := int64(claims["expired"].(float64))
 		if time.Now().Unix() > expirationTime {
 			json.NewResponseUnauthorized(c, "Token Expired", "00", "00")
 			c.Abort()

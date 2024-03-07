@@ -1,7 +1,7 @@
 package authDelivery
 
 import (
-	"BookingRoom/model/dto"
+	"BookingRoom/model/dto/employeesDto"
 	"BookingRoom/model/dto/json"
 	"BookingRoom/pkg/middleware"
 	"BookingRoom/src/auth"
@@ -22,7 +22,7 @@ func NewAuthDelivery(v1Group *gin.RouterGroup, authUC auth.AuthUsecase) {
 }
 
 func (e *authDelivery) getLogin(ctx *gin.Context) {
-	var req dto.LoginRequest
+	var req employeesDto.LoginRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		detail := json.ValidationField{FieldName: "Login", Message: err.Error()}
 		listError := []json.ValidationField{detail}

@@ -1,8 +1,9 @@
 package employeeDelivery
 
 import (
-	"BookingRoom/model/dto"
+	"BookingRoom/model/dto/employeesDto"
 	"BookingRoom/model/dto/json"
+	"BookingRoom/pkg/middleware"
 	"BookingRoom/src/employees"
 
 	"github.com/gin-gonic/gin"
@@ -20,22 +21,24 @@ func NewEmployeeDelivery(v1Group *gin.RouterGroup, employeeUC employees.Employee
 
 	employeeGroup := v1Group.Group("/employees")
 	{
-		employeeGroup.GET("/", handler.getEmployee)
-		employeeGroup.GET("/:id", handler.getEmployeeById)
-		employeeGroup.POST("/", handler.createEmployee)
-		employeeGroup.PUT("/:id", handler.updateEmployee)
-		employeeGroup.DELETE("/:id", handler.deleteEmployee)
+		employeeGroup.GET("/", middleware.JWTAuth("ADMIN", "GA"), handler.getEmployee)
+		employeeGroup.GET("/:id", middleware.JWTAuth("ADMIN", "GA", "EMPLOYEE"), handler.getEmployeeById)
+		employeeGroup.POST("/", middleware.JWTAuth("ADMIN", "GA"), handler.createEmployee)
+		employeeGroup.PUT("/:id", middleware.JWTAuth("ADMIN", "GA", "EMPLOYEE"), handler.updateEmployee)
+		employeeGroup.DELETE("/:id", middleware.JWTAuth("ADMIN", "GA"), handler.deleteEmployee)
 	}
 }
 
 func (e *employeeDelivery) getEmployee(ctx *gin.Context) {
-	employee, err := e.employeeUC.GetEmployee()
+	page := ctx.Query("page")
+	size := ctx.Query("size")
+	employee, pagination, err := e.employeeUC.GetEmployee(page, size)
 	if err != nil {
 		json.NewResponseError(ctx, err.Error(), "02", "02")
 		return
 	}
 
-	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+	json.NewResponseSuccess(ctx, employee, pagination, "success", "01", "01")
 }
 
 func (e *employeeDelivery) getEmployeeById(ctx *gin.Context) {
@@ -51,11 +54,14 @@ func (e *employeeDelivery) getEmployeeById(ctx *gin.Context) {
 }
 
 func (e *employeeDelivery) createEmployee(ctx *gin.Context) {
-	var employee dto.Employees
+	var employee employeesDto.Employees
 
 	if err := ctx.ShouldBindJSON(&employee); err != nil {
-		json.NewResponseBadRequest(ctx, []json.ValidationField{}, err.Error(), "01", "01")
-		return
+		valError := employeesDto.ValidationEmployee(employee)
+		if len(valError) > 0 {
+			json.NewResponseBadRequest(ctx, valError, err.Error(), "01", "01")
+			return
+		}
 	}
 
 	if err := e.employeeUC.StoreEmployee(&employee); err != nil {
@@ -74,7 +80,7 @@ func (e *employeeDelivery) updateEmployee(ctx *gin.Context) {
 		return
 	}
 
-	var employee dto.Employees
+	var employee employeesDto.Employees
 	if err := ctx.ShouldBindJSON(&employee); err != nil {
 		json.NewResponseBadRequest(ctx, []json.ValidationField{}, err.Error(), "01", "01")
 		return
