@@ -32,3 +32,7 @@ func (e *authUC) Login(employees employeesDto.LoginRequest) (token string, err e
 
 	return token, err
 }
+
+func (e *authUC) UpdatePassword(employee employeesDto.Employees) error {
+	return nil
+}

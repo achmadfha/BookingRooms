@@ -2,6 +2,7 @@ package employeesDto
 
 import (
 	"BookingRoom/model/dto/json"
+	"regexp"
 
 	"github.com/google/uuid"
 )
@@ -64,6 +65,20 @@ func ValidationEmployee(employee Employees) []json.ValidationField {
 		valError = append(valError, json.ValidationField{
 			FieldName: "Position",
 			Message:   "is required.",
+		})
+	}
+	if employee.Username == "" {
+		valError = append(valError, json.ValidationField{
+			FieldName: "Username",
+			Message:   "is required.",
+		})
+	}
+
+	phoneRegex := regexp.MustCompile(`^\d{9,13}$`)
+	if !phoneRegex.MatchString(employee.PhoneNumber) {
+		valError = append(valError, json.ValidationField{
+			FieldName: "PhoneNumber",
+			Message:   "is number.",
 		})
 	}
 

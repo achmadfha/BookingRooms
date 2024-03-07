@@ -85,9 +85,25 @@ func (e *employeeUC) StoreEmployee(employee *employeesDto.Employees) error {
 func (e *employeeUC) UpdateEmployee(employee employeesDto.Employees) error {
 
 	// Validasi
-	_, err := e.employeeRepo.RetrieveEmployeeById(employee.EmployeeId.String())
+	oldData, err := e.employeeRepo.RetrieveEmployeeById(employee.EmployeeId.String())
 	if err != nil {
 		return err
+	}
+
+	if employee.FullName == "" {
+		employee.FullName = oldData.FullName
+	}
+	if employee.Division == "" {
+		employee.Division = oldData.Division
+	}
+	if employee.PhoneNumber == "" {
+		employee.PhoneNumber = oldData.PhoneNumber
+	}
+	if employee.Position == "" {
+		employee.Position = oldData.Position
+	}
+	if employee.Username == "" {
+		employee.Username = oldData.Username
 	}
 
 	err = e.employeeRepo.RenewEmployee(employee)

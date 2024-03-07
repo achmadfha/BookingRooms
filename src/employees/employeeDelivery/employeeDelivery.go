@@ -97,12 +97,6 @@ func (e *employeeDelivery) updateEmployee(ctx *gin.Context) {
 		return
 	}
 
-	valError := employeesDto.ValidationEmployee(employee)
-	if len(valError) > 0 {
-		json.NewResponseBadRequest(ctx, valError, "failed", "01", "01")
-		return
-	}
-
 	employee.EmployeeId = employeeId
 
 	if err := e.employeeUC.UpdateEmployee(employee); err != nil {
@@ -110,11 +104,17 @@ func (e *employeeDelivery) updateEmployee(ctx *gin.Context) {
 			json.NewResponseError(ctx, "Id not found", "02", "02")
 			return
 		}
+		json.NewResponseError(ctx, "id not found", "01", "01")
+		return
+	}
+
+	updateEmployee, err := e.employeeUC.GetEmployeeById(employee.EmployeeId.String())
+	if err != nil {
 		json.NewResponseError(ctx, err.Error(), "01", "01")
 		return
 	}
 
-	json.NewResponseSuccess(ctx, employee, nil, "success", "01", "01")
+	json.NewResponseSuccess(ctx, updateEmployee, nil, "success", "01", "01")
 }
 
 func (e *employeeDelivery) deleteEmployee(ctx *gin.Context) {

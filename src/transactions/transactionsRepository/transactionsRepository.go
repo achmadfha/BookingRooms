@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/lib/pq"
 )
 
@@ -35,14 +36,14 @@ func (t transactionsRepository) RetrieveAllTransactions(page int, pageSize int, 
 		var transaction transactionsDto.Transactions
 		err := rows.Scan(&transaction.ID, &transaction.EmployeeId, &transaction.RoomId, &transaction.StartDate, &transaction.EndDate, &transaction.Description, &transaction.Status, &transaction.CreatedAt, &transaction.UpdatedAt)
 		if err != nil {
-			errors.New(fmt.Sprintf("Error scanning transactions row: %s", err))
+			errors.New(fmt.Sprintf("error scanning transactions row: %s", err))
 			continue
 		}
 		transactions = append(transactions, transaction)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, errors.New(fmt.Sprintf("Error iterating through transactions rows: %s", err))
+		return nil, errors.New(fmt.Sprintf("error iterating through transactions rows: %s", err))
 	}
 
 	return transactions, nil

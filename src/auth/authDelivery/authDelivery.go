@@ -19,6 +19,7 @@ func NewAuthDelivery(v1Group *gin.RouterGroup, authUC auth.AuthUsecase) {
 	}
 	authGroup := v1Group.Group("/auth")
 	authGroup.POST("/login", middleware.BasicAuth, handler.getLogin)
+	authGroup.POST("/password", middleware.JWTAuth("ADMIN", "GA", "EMPLOYEE"))
 }
 
 func (e *authDelivery) getLogin(ctx *gin.Context) {
@@ -52,4 +53,8 @@ func (e *authDelivery) getLogin(ctx *gin.Context) {
 	data := interface{}(map[string]interface{}{"access_token": token})
 
 	json.NewResponseSuccess(ctx, data, nil, "success", "01", "03")
+}
+
+func (e *authDelivery) setPassword(ctx *gin.Context) {
+
 }
