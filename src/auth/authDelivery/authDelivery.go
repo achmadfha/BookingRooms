@@ -38,20 +38,20 @@ func (e *authDelivery) getLogin(ctx *gin.Context) {
 
 	token, err := e.authUC.Login(req)
 	if err != nil {
-		if err.Error() == "01" {
-			json.NewResponseBadRequest(ctx, nil, "employee doesn't exists on our record", "01", "02")
+		switch err.Error() {
+		case "01":
+			json.NewResponseBadRequest(ctx, nil, "employee doesn't exists on our record", "01", "01")
+			return
+		case "02":
+			json.NewResponseUnauthorized(ctx, "Unauthorized: Username and password do not match", "02", "02")
+			return
+		case "03":
+			json.NewResponseUnauthorized(ctx, "Invalid Token Access", "03", "03")
+			return
+		default:
+			json.NewResponseError(ctx, err.Error(), "04", "04")
 			return
 		}
-		if err.Error() == "02" {
-			json.NewResponseBadRequest(ctx, nil, "Unauthorized username and password didn't match", "01", "02")
-			return
-		}
-		if err.Error() == "03" {
-			json.NewResponseBadRequest(ctx, nil, "Invalid Token Access", "01", "02")
-			return
-		}
-		json.NewResponseError(ctx, err.Error(), "01", "02")
-		return
 	}
 
 	data := interface{}(map[string]interface{}{"access_token": token})
