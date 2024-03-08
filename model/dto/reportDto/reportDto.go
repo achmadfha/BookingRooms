@@ -1,4 +1,4 @@
-package transactionDto
+package reportDto
 
 type Transactions struct {
 	Transaction_id string
@@ -10,4 +10,5 @@ type Transactions struct {
 	Status         string
 	Created_at     string
 	Updated_at     string
+	Jumlah         string
 }
