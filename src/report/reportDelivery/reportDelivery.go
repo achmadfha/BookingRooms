@@ -83,7 +83,7 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		return
 	}
 
-	headers := []string{"Transaction_id", "Employee_id", "Room_id", "StartDate", "Description", "EndDate", "Status", "Created_at", "Updated_at", "Jumlah"}
+	headers := []string{"Transaction_id", "Employee_id", "Room_id", "StartDate", "Description", "EndDate", "Status", "Created_at", "Updated_at", "Jumlah_Transaksi"}
 	headerRow := sheet.AddRow()
 	for _, header := range headers {
 		cell := headerRow.AddCell()

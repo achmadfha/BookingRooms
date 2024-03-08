@@ -49,3 +49,6 @@
 {"level":"info","time":"08-03-2024 09:04:42","message":"Try connect to database..."}
 {"level":"info","time":"08-03-2024 09:04:42","message":"Database connected successfully"}
 {"level":"info","time":"08-03-2024 09:04:42","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 09:05:20","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 09:05:20","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 09:05:20","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
