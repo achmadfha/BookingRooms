@@ -63,10 +63,49 @@ type (
 		Status      string      `json:"status"`
 	}
 
+	RoomResponse struct {
+		ID          uuid.UUID `json:"room_id"`
+		RoomDetails uuid.UUID `json:"room_details"`
+		Name        string    `json:"name"`
+		Status      string    `json:"status"`
+	}
+
 	RoomDetails struct {
 		ID       uuid.UUID `json:"room_details_id"`
 		RoomType string    `json:"room_type"`
 		Capacity int       `json:"capacity"`
 		Facility []string  `json:"facility"`
+	}
+
+	TransactionLog struct {
+		TransactionLogID uuid.UUID `json:"transaction_log_id"`
+		TransactionsID   uuid.UUID `json:"transaction_id"`
+		ApprovedBy       uuid.UUID `json:"approved_by"`
+		ApprovalStatus   string    `json:"approval_status"`
+		Descriptions     string    `json:"description"`
+		CreatedAt        string    `json:"created_at"`
+		UpdatedAt        string    `json:"updated_at"`
+	}
+
+	TransactionLogRequest struct {
+		ApprovedBy     uuid.UUID `json:"approved_by"`
+		TransactionsID uuid.UUID `json:"transaction_id"`
+		ApprovalStatus string    `json:"approval_status"`
+		Descriptions   string    `json:"description"`
+	}
+
+	TransactionLogDetailResponse struct {
+		TransactionLogID uuid.UUID                  `json:"transaction_log_id"`
+		TransactionsID   TransactionsDetailResponse `json:"transaction"`
+		ApprovedBy       EmployeeDetails            `json:"approved_by"`
+		ApprovalStatus   string                     `json:"approval_status"`
+		Descriptions     string                     `json:"description"`
+		CreatedAt        string                     `json:"created_at"`
+		UpdatedAt        string                     `json:"updated_at"`
+	}
+
+	TransactionLogs struct {
+		TransactionLogID uuid.UUID `json:"transaction_log_id"`
+		TransactionsID   uuid.UUID `json:"transaction_id"`
 	}
 )

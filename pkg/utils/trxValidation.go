@@ -70,3 +70,44 @@ func ValidationTrxReq(trxReq transactionsDto.TransactionsRequest) []json.Validat
 
 	return validationErrors
 }
+
+func ValidationUpdateTrxReq(trxReq transactionsDto.TransactionLog) []json.ValidationField {
+	var validationErrors []json.ValidationField
+
+	// Validate EmployeeId
+	if trxReq.ApprovedBy == uuid.Nil {
+		validationErrors = append(validationErrors, json.ValidationField{
+			FieldName: "approved_by",
+			Message:   "Employee ID is required",
+		})
+	}
+
+	// Validate TransactionsLogsId
+	if trxReq.TransactionLogID == uuid.Nil {
+		validationErrors = append(validationErrors, json.ValidationField{
+			FieldName: "transaction_id",
+			Message:   "Employee ID is required",
+		})
+	}
+
+	if trxReq.ApprovalStatus != "ACCEPT" && trxReq.ApprovalStatus != "DECLINE" {
+		validationErrors = append(validationErrors, json.ValidationField{
+			FieldName: "approval_status",
+			Message:   "Approval status must be either ACCEPT or DECLINE",
+		})
+	}
+
+	if trxReq.Descriptions == "" {
+		validationErrors = append(validationErrors, json.ValidationField{
+			FieldName: "description",
+			Message:   "Description is required",
+		})
+	} else if len(trxReq.Descriptions) < 10 {
+		validationErrors = append(validationErrors, json.ValidationField{
+			FieldName: "description",
+			Message:   "Description length should be 10 characters minimum",
+		})
+	}
+
+	return validationErrors
+}
