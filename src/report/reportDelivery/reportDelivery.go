@@ -74,10 +74,8 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		return
 	}
 
-	// Membuat file Excel baru
 	file := xlsx.NewFile()
 
-	// Membuat sheet baru
 	sheetName := "Daily Transactions " + formatDate
 	sheet, err := file.AddSheet(sheetName)
 	if err != nil {
@@ -119,6 +117,8 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	json.NewResponseSuccess(c, transactions, nil, "success", "01", "01")
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+excelFilename)
