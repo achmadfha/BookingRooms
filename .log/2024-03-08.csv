@@ -118,3 +118,30 @@
 {"level":"info","time":"08-03-2024 10:17:32","message":"Try connect to database..."}
 {"level":"info","time":"08-03-2024 10:17:32","message":"Database connected successfully"}
 {"level":"info","time":"08-03-2024 10:17:32","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 10:23:48","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 10:23:48","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 10:23:48","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 10:31:56","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 10:31:56","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 10:31:56","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:21:01","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:21:01","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:21:01","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:22:20","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:22:20","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:22:20","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:31:05","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:31:05","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:31:05","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:45:06","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:45:06","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:45:06","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:46:16","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:46:16","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:46:16","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:48:00","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:48:00","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:48:00","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"08-03-2024 14:48:38","message":"Try connect to database..."}
+{"level":"info","time":"08-03-2024 14:48:38","message":"Database connected successfully"}
+{"level":"info","time":"08-03-2024 14:48:38","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}

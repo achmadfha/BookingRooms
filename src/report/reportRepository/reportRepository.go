@@ -105,6 +105,7 @@ func (t *ReportRepository) GetDailyTransactions(year, month, day string) ([]repo
 			&transaction.Created_at, &transaction.Updated_at); err != nil {
 			return nil, err
 		}
+
 		transactions = append(transactions, transaction)
 	}
 

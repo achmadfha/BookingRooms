@@ -101,12 +101,12 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.Transaction_id)
 		dataRow.AddCell().SetString(transaction.Employee_id)
 		dataRow.AddCell().SetString(transaction.Room_id)
-		dataRow.AddCell().SetString(transaction.StartDate)
+		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
-		dataRow.AddCell().SetString(transaction.EndDate)
+		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Status)
-		dataRow.AddCell().SetString(transaction.Created_at)
-		dataRow.AddCell().SetString(transaction.Updated_at)
+		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
+		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Jumlah)
 	}
 
@@ -124,7 +124,7 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		return
 	}
 
-	json.NewResponseSuccess(c, transactions, nil, "Data Berhasil Di Export", "01", "02")
+	json.NewResponseSuccess(c, nil, nil, "Data Berhasil Di Export", "01", "02")
 
 	c.Writer.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+excelFilename)
@@ -164,12 +164,12 @@ func (h *ReportDelivery) ExportMonthlyTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.Transaction_id)
 		dataRow.AddCell().SetString(transaction.Employee_id)
 		dataRow.AddCell().SetString(transaction.Room_id)
-		dataRow.AddCell().SetString(transaction.StartDate)
+		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
-		dataRow.AddCell().SetString(transaction.EndDate)
+		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Status)
-		dataRow.AddCell().SetString(transaction.Created_at)
-		dataRow.AddCell().SetString(transaction.Updated_at)
+		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
+		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Jumlah)
 	}
 
@@ -226,12 +226,12 @@ func (h *ReportDelivery) ExportYearTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.Transaction_id)
 		dataRow.AddCell().SetString(transaction.Employee_id)
 		dataRow.AddCell().SetString(transaction.Room_id)
-		dataRow.AddCell().SetString(transaction.StartDate)
+		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
-		dataRow.AddCell().SetString(transaction.EndDate)
+		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Status)
-		dataRow.AddCell().SetString(transaction.Created_at)
-		dataRow.AddCell().SetString(transaction.Updated_at)
+		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
+		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Jumlah)
 	}
 
