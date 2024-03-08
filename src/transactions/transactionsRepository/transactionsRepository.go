@@ -225,6 +225,20 @@ func (t transactionsRepository) UpdateTrxLog(trxLog transactionsDto.TransactionL
 		return err
 	}
 
+	// Update status room to booked
+	roomQuery := `
+        UPDATE room
+        SET
+            status = 'BOOKED'
+        WHERE
+            room_id = $1
+    `
+
+	_, err = tx.Exec(roomQuery, trxLog.RoomsID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

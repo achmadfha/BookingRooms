@@ -81,6 +81,7 @@ type (
 		TransactionLogID uuid.UUID `json:"transaction_log_id"`
 		TransactionsID   uuid.UUID `json:"transaction_id"`
 		ApprovedBy       uuid.UUID `json:"approved_by"`
+		RoomsID          uuid.UUID `json:"rooms_id"`
 		ApprovalStatus   string    `json:"approval_status"`
 		Descriptions     string    `json:"description"`
 		CreatedAt        string    `json:"created_at"`

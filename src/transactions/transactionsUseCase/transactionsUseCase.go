@@ -209,10 +209,22 @@ func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) erro
 		return err
 	}
 
+	// get room id
+	trxID := trxLogIDExists.TransactionsID.String()
+	roomsID, err := t.transactionsRepository.RetrieveTransactionsByID(trxID)
+	if err != nil {
+		if err.Error() == "01" {
+			// trx log id not found
+			return errors.New("02")
+		}
+		return err
+	}
+
 	// do updated
 	trxData := transactionsDto.TransactionLog{
 		ApprovedBy:       employeIDExists.EmployeeId,
 		ApprovalStatus:   trxLog.ApprovalStatus,
+		RoomsID:          roomsID.RoomId.ID,
 		Descriptions:     trxLog.Descriptions,
 		TransactionLogID: trxLogIDExists.TransactionLogID,
 		TransactionsID:   trxLogIDExists.TransactionsID,

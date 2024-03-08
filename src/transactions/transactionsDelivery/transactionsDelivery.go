@@ -23,14 +23,14 @@ func NewTransactionsDelivery(v1Group *gin.RouterGroup, transactionsUC transactio
 
 	transactionsGroup := v1Group.Group("/transactions")
 	{
-		transactionsGroup.GET("", middleware.JWTAuth("ADMIN"), handler.RetrieveAllTransactions)
-		transactionsGroup.GET("/:id", middleware.JWTAuth("ADMIN"), handler.RetrieveTransactionsByID)
-		transactionsGroup.POST("", middleware.JWTAuth("ADMIN"), handler.CreateTransactions)
+		transactionsGroup.GET("", middleware.JWTAuth("GA"), handler.RetrieveAllTransactions)
+		transactionsGroup.GET("/:id", middleware.JWTAuth("GA"), handler.RetrieveTransactionsByID)
+		transactionsGroup.POST("", middleware.JWTAuth("ADMIN", "EMPLOYEE", "GA"), handler.CreateTransactions)
 	}
 
 	transactionsGroupLogs := transactionsGroup.Group("/logs")
 	{
-		transactionsGroupLogs.POST("/:id", middleware.JWTAuth("GA"), handler.UpdateTransactions)
+		transactionsGroupLogs.PUT("/:id", middleware.JWTAuth("GA"), handler.UpdateTransactions)
 		transactionsGroupLogs.GET("/:id", middleware.JWTAuth("GA"), handler.RetrieveTrxLogBydID)
 		transactionsGroupLogs.GET("", middleware.JWTAuth("GA"), handler.RetrieveAllTrxLogs)
 	}
