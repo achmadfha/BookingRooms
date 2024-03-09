@@ -42,7 +42,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 - **Methods**:
     - `GET`: Retrieve a list of transactions.
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - Optional Parameters:
     - **page**: (Optional) The page number for paginated results.
     - **size**: (Optional) The number of transactions per page.
@@ -91,12 +91,12 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 - **Description**: Retrieve a specific transaction by its ID.
 - **Methods**:
-    - `GET`: Retrieve a transaction by its ID.
+  - `GET`: Retrieve a transaction by its ID.
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 ```json
 {
     "responseCode": "string",
@@ -138,7 +138,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 - **Description**: This endpoint allows you to create a new transaction.
 - **Methods**: `POST`
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - **Body**:
 
 ```json
@@ -152,8 +152,8 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```
 
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 
 ```json
 {
@@ -165,10 +165,10 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 #### Endpoint: `/transactions/logs/:id`
 
 - **Description**: This endpoint allows you to accept or decline a transaction.
-- **Methods**:
-    - `PUT` : `/:id` use ur transactions log id
+- **Methods**: 
+  - `PUT` : `/:id` use ur transactions log id
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - **Body**:
 
 ```json
@@ -180,8 +180,8 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```
 
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 
 ```json
 {
@@ -195,12 +195,12 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 - **Description**: This endpoint allows you to see transactions accept or decline and the reason for it.
 - **Methods**:
-    - `GET` : `/:id` use ur transactions log id
+  - `GET` : `/:id` use ur transactions log id
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 
 ```json
 {
@@ -255,17 +255,17 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 #### Endpoint: `/transactions/logs`
 - **Description**: Retrieve all log transaction data using this endpoint.
 - **Methods**:
-    - `GET`: Retrieve a list of transaction logs.
+  - `GET`: Retrieve a list of transaction logs.
 - **Header**:
-    - `Authorization`: `Bearer <your JWT token>`
+  - `Authorization`: `Bearer <your JWT token>`
 - Optional Parameters:
-    - **page**: (Optional) The page number for paginated results.
-    - **size**: (Optional) The number of transactions per page.
-    - **startDate**: (Optional) The start date for filtering transactions.
-    - **endDate**: (Optional) The end date for filtering transactions.
+  - **page**: (Optional) The page number for paginated results.
+  - **size**: (Optional) The number of transactions per page.
+  - **startDate**: (Optional) The start date for filtering transactions.
+  - **endDate**: (Optional) The end date for filtering transactions.
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 
 ```json
 {
