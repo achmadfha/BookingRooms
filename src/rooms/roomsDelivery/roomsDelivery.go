@@ -133,5 +133,5 @@ func (r roomsDelivery) UpdateRooms(ctx *gin.Context) {
 		return
 	}
 
-	json.NewResponseSuccess(ctx, "Transaction log updated successfully", nil, "success", "02", "04")
+	json.NewResponseSuccess(ctx, nil, nil, "Transaction log updated successfully", "02", "04")
 }

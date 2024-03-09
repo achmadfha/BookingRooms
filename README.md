@@ -35,6 +35,130 @@ All endpoints in this collection share a common base path: `/api/v1/`. Ensure th
 All endpoints in this API require authentication using JWT (JSON Web Tokens). To access any endpoint, you must include a valid JWT token in the Authorization header of your requests.
 
 ## Endpoints
+### Room Management
+#### Endpoint: `/room`
+- **Description**: Retrieve all room data using this endpoint.
+- **Methods**:
+  - `GET`: Retrieve a list of room.
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- Optional Parameters:
+  - **page**: (Optional) The page number for paginated results.
+  - **size**: (Optional) The number of transactions per page.
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+```json
+{
+    "responseCode": "string",
+    "responseMessage": "string",
+    "data": [
+        {
+            "room_id": "uuid",
+            "room_details_id": "uuid",
+            "name": "string",
+            "status": "string"
+        },
+        {
+          "room_id": "uuid",
+          "room_details_id": "uuid",
+          "name": "string",
+          "status": "string"
+        }
+    ],
+    "paging": {
+        "page": int,
+        "totalPages": int,
+        "totalData": int
+    }
+}
+```
+#### Endpoint: `/transactions/:id`
+
+- **Description**: Retrieve a specific room by its ID.
+- **Methods**: `GET`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+```json
+{
+    "responseCode": "string",
+    "responseMessage": "string",
+    "data": {
+        "room_id": "uuid",
+        "room_details": {
+            "room_details_id": "uuid",
+            "room_type": "string",
+            "capacity": int,
+            "facility": [
+                "string",
+                "string"
+            ]
+        },
+        "name": "string",
+        "status": "string"
+    }
+}
+```
+#### Endpoint: `/room`
+- **Description**: This endpoint allows you to create a new room.
+- **Methods**: `POST`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Body** :
+```json
+{
+    "name": "string",
+    "status": "string",
+    "room_type": "string",
+    "capacity": int,
+    "facility": [
+        "string",
+        "string"
+    ]
+}
+```
+- **Response**:
+  - **Status Code**: 201 Created
+  - **Body**:
+```json
+{
+    "responseCode": "string",
+    "responseMessage": "string"
+}
+```
+#### Endpoint: `/room/:id`
+- **Description**: This endpoint allows you to update room.
+- **Methods**: `PUT`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Body** :
+  - field body are optional, update fields u want 
+```json
+{
+    "name": "string",
+    "status": "string",
+    "room_type": "string",
+    "capacity": int,
+    "facility": [
+        "string",
+        "string"
+    ]
+}
+```
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+```json
+{
+    "responseCode": "string",
+    "responseMessage": "string"
+}
+```
+
+
 
 ### Transactions Management
 #### Endpoint: `/transactions`
@@ -152,7 +276,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```
 
 - **Response**:
-  - **Status Code**: 200 OK
+  - **Status Code**: 201 Created
   - **Body**:
 
 ```json
