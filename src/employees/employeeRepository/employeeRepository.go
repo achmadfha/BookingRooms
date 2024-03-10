@@ -46,6 +46,9 @@ func (e *employeeRepository) RetrieveEmployeeById(id string) (employeesDto.Emplo
 	row := e.db.QueryRow("SELECT employee_id, full_name, division, phone_number, position FROM employee WHERE employee_id=$1", id)
 	err := row.Scan(&employee.EmployeeId, &employee.FullName, &employee.Division, &employee.PhoneNumber, &employee.Position)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return employeesDto.Employees{}, errors.New("02")
+		}
 		return employeesDto.Employees{}, errors.New("1")
 	}
 

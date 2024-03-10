@@ -1,4 +1,5 @@
 /.idea
 .env
 /.log
-.cover.out
+cover.out
+/.excel
