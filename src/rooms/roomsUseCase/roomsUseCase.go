@@ -6,7 +6,6 @@ import (
 	"BookingRoom/src/rooms"
 	"database/sql"
 	"errors"
-	"fmt"
 	"github.com/google/uuid"
 	"math"
 )
@@ -19,17 +18,17 @@ func NewRoomsUseCase(roomsRepo rooms.RoomsRepository) rooms.RoomUseCase {
 	return &roomsUC{roomsRepo}
 }
 
-func (r roomsUC) CreateRooms(req roomsDto.RoomsRequest) error {
+func (r roomsUC) CreateRooms(req roomsDto.RoomsRequest) (roomsDto.RoomResponse, error) {
 	roomId, err := uuid.NewRandom()
 	if err != nil {
 		// 01 error while generate uuid room id
-		return errors.New("01")
+		return roomsDto.RoomResponse{}, errors.New("01")
 	}
 
 	roomDetailId, err := uuid.NewRandom()
 	if err != nil {
 		// 02 error while generate uuid room details id
-		return errors.New("02")
+		return roomsDto.RoomResponse{}, errors.New("02")
 	}
 
 	newRooms := roomsDto.RoomsCreate{
@@ -42,13 +41,27 @@ func (r roomsUC) CreateRooms(req roomsDto.RoomsRequest) error {
 		Facility:      req.Facility,
 	}
 
-	fmt.Println(newRooms)
 	err = r.roomsRepository.CreateRooms(newRooms)
 	if err != nil {
-		return err
+		return roomsDto.RoomResponse{}, err
 	}
 
-	return nil
+	// Construct roomsDetail with desired values
+	roomsDetail := roomsDto.RoomDetails{
+		RoomDetailsID: roomDetailId,
+		RoomType:      req.RoomType,
+		Capacity:      req.Capacity,
+		Facility:      req.Facility,
+	}
+
+	data := roomsDto.RoomResponse{
+		ID:           roomId,
+		RoomDetailID: roomsDetail,
+		Name:         req.Name,
+		Status:       req.Status,
+	}
+
+	return data, nil
 }
 
 func (r roomsUC) RetrieveAllRooms(page, pageSize int) ([]roomsDto.Rooms, json.Pagination, error) {

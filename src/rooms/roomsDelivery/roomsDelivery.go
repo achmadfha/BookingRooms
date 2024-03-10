@@ -41,7 +41,7 @@ func (r roomsDelivery) CreateRooms(ctx *gin.Context) {
 		return
 	}
 
-	err := r.roomsUC.CreateRooms(req)
+	data, err := r.roomsUC.CreateRooms(req)
 	if err != nil {
 		if err.Error() == "01" {
 			json.NewResponseError(ctx, "err", "02", "01")
@@ -57,7 +57,7 @@ func (r roomsDelivery) CreateRooms(ctx *gin.Context) {
 		return
 	}
 
-	json.NewResponseCreatedSuccess(ctx, "Rooms created successfully", "02", "01")
+	json.NewResponseCreatedSuccess(ctx, data, "Rooms created successfully", "02", "01")
 }
 
 func (r roomsDelivery) RetrieveAllRooms(ctx *gin.Context) {

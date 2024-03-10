@@ -14,7 +14,7 @@ type RoomsRepository interface {
 }
 
 type RoomUseCase interface {
-	CreateRooms(req roomsDto.RoomsRequest) error
+	CreateRooms(req roomsDto.RoomsRequest) (roomsDto.RoomResponse, error)
 	RetrieveAllRooms(page, pageSize int) ([]roomsDto.Rooms, json.Pagination, error)
 	RetrieveRoomByID(roomID string) (roomsDto.RoomResponse, error)
 	UpdateRoomsByID(req roomsDto.RoomsCreate) error

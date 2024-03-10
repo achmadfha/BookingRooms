@@ -36,6 +36,16 @@ type (
 		TransactionsLogsID uuid.UUID `json:"transactions_log_id"`
 	}
 
+	CreatedTransactionsResponse struct {
+		ID          uuid.UUID `json:"id"`
+		EmployeeId  uuid.UUID `json:"employee_id"`
+		RoomId      uuid.UUID `json:"room_id"`
+		StartDate   string    `json:"start_date"`
+		EndDate     string    `json:"end_date"`
+		Description string    `json:"description"`
+		Status      string    `json:"status"`
+	}
+
 	TransactionsDetailResponse struct {
 		ID          uuid.UUID       `json:"transaction_id"`
 		EmployeeId  EmployeeDetails `json:"employee"`
@@ -88,6 +98,16 @@ type (
 		UpdatedAt        string    `json:"updated_at"`
 	}
 
+	TransactionLogResponse struct {
+		TransactionLogID uuid.UUID `json:"transaction_log_id"`
+		TransactionsID   uuid.UUID `json:"transaction_id"`
+		ApprovedBy       string    `json:"approved_by"`
+		ApprovalStatus   string    `json:"approval_status"`
+		Descriptions     string    `json:"description"`
+		CreatedAt        string    `json:"created_at"`
+		UpdatedAt        string    `json:"updated_at"`
+	}
+
 	TransactionLogRequest struct {
 		ApprovedBy     uuid.UUID `json:"approved_by"`
 		TransactionsID uuid.UUID `json:"transaction_id"`
@@ -108,5 +128,11 @@ type (
 	TransactionLogs struct {
 		TransactionLogID uuid.UUID `json:"transaction_log_id"`
 		TransactionsID   uuid.UUID `json:"transaction_id"`
+	}
+
+	TrxUpdateResponse struct {
+		ApprovedBy     string `json:"approved_by"`
+		ApprovalStatus string `json:"approval_status"`
+		Descriptions   string `json:"description"`
 	}
 )

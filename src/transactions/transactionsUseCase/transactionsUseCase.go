@@ -125,17 +125,17 @@ func (t transactionsUC) RetrieveTransactionsByID(trxID string) (transactionsDto.
 	return trxData, err
 }
 
-func (t transactionsUC) CreateTransactions(trxReq transactionsDto.TransactionsRequest) error {
+func (t transactionsUC) CreateTransactions(trxReq transactionsDto.TransactionsRequest) (transactionsDto.CreatedTransactionsResponse, error) {
 	trxID, err := uuid.NewRandom()
 	if err != nil {
 		// error while generate uuid transaction
-		return errors.New("01")
+		return transactionsDto.CreatedTransactionsResponse{}, errors.New("01")
 	}
 
 	trxLogID, err := uuid.NewRandom()
 	if err != nil {
 		// error while generate uuid transaction logs
-		return errors.New("02")
+		return transactionsDto.CreatedTransactionsResponse{}, errors.New("02")
 	}
 
 	// todo
@@ -145,9 +145,9 @@ func (t transactionsUC) CreateTransactions(trxReq transactionsDto.TransactionsRe
 	if err != nil {
 		if err.Error() == "02" {
 			// employee not found
-			return errors.New("03")
+			return transactionsDto.CreatedTransactionsResponse{}, errors.New("03")
 		}
-		return err
+		return transactionsDto.CreatedTransactionsResponse{}, err
 	}
 
 	roomID := trxReq.RoomId.String()
@@ -155,15 +155,15 @@ func (t transactionsUC) CreateTransactions(trxReq transactionsDto.TransactionsRe
 	if err != nil {
 		if err.Error() == "01" {
 			// rooms not found
-			return errors.New("04")
+			return transactionsDto.CreatedTransactionsResponse{}, errors.New("04")
 		}
-		return err
+		return transactionsDto.CreatedTransactionsResponse{}, err
 	}
 
 	// 2. checks if there room is available
 	if rooms.Status != "AVAILABLE" {
 		// room is not available
-		return errors.New("05")
+		return transactionsDto.CreatedTransactionsResponse{}, errors.New("05")
 	}
 
 	trxStatus := "PENDING"
@@ -180,22 +180,32 @@ func (t transactionsUC) CreateTransactions(trxReq transactionsDto.TransactionsRe
 
 	err = t.transactionsRepository.CreateTransactions(newTrx)
 	if err != nil {
-		return err
+		return transactionsDto.CreatedTransactionsResponse{}, err
 	}
 
-	return nil
+	data := transactionsDto.CreatedTransactionsResponse{
+		ID:          trxLogID,
+		EmployeeId:  employe.EmployeeId,
+		RoomId:      rooms.ID,
+		StartDate:   trxReq.StartDate,
+		EndDate:     trxReq.EndDate,
+		Description: trxReq.Description,
+		Status:      trxStatus,
+	}
+
+	return data, nil
 }
 
-func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) error {
+func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) (transactionsDto.TrxUpdateResponse, error) {
 	// check employee id are exists
 	employeID := trxLog.ApprovedBy.String()
 	employeIDExists, err := t.employeeRepository.RetrieveEmployeeById(employeID)
 	if err != nil {
 		if err.Error() == "02" {
 			// employee not found
-			return errors.New("01")
+			return transactionsDto.TrxUpdateResponse{}, errors.New("01")
 		}
-		return err
+		return transactionsDto.TrxUpdateResponse{}, err
 	}
 
 	// check trx log id are exists
@@ -204,9 +214,9 @@ func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) erro
 	if err != nil {
 		if err.Error() == "01" {
 			// trx log id not found
-			return errors.New("02")
+			return transactionsDto.TrxUpdateResponse{}, errors.New("02")
 		}
-		return err
+		return transactionsDto.TrxUpdateResponse{}, err
 	}
 
 	// get room id
@@ -215,9 +225,9 @@ func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) erro
 	if err != nil {
 		if err.Error() == "01" {
 			// trx log id not found
-			return errors.New("02")
+			return transactionsDto.TrxUpdateResponse{}, errors.New("02")
 		}
-		return err
+		return transactionsDto.TrxUpdateResponse{}, err
 	}
 
 	// do updated
@@ -232,10 +242,16 @@ func (t transactionsUC) UpdateTrxLog(trxLog transactionsDto.TransactionLog) erro
 
 	err = t.transactionsRepository.UpdateTrxLog(trxData)
 	if err != nil {
-		return err
+		return transactionsDto.TrxUpdateResponse{}, err
 	}
 
-	return nil
+	data := transactionsDto.TrxUpdateResponse{
+		ApprovedBy:     employeIDExists.FullName,
+		ApprovalStatus: trxLog.ApprovalStatus,
+		Descriptions:   trxLog.Descriptions,
+	}
+
+	return data, nil
 }
 
 func (t transactionsUC) RetrieveTrxLogByID(trxLodID string) (transactionsDto.TransactionLogDetailResponse, error) {
@@ -265,7 +281,7 @@ func (t transactionsUC) RetrieveTrxLogByID(trxLodID string) (transactionsDto.Tra
 	return trxLogData, err
 }
 
-func (t transactionsUC) RetrieveAllTrxLog(page int, pageSize int, startDate string, endDate string) ([]transactionsDto.TransactionLog, json.Pagination, error) {
+func (t transactionsUC) RetrieveAllTrxLog(page int, pageSize int, startDate string, endDate string) ([]transactionsDto.TransactionLogResponse, json.Pagination, error) {
 	if page <= 0 {
 		page = 1
 	}

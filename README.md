@@ -271,7 +271,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
   - `Authorization`: `Bearer <your JWT token>`
 - Optional Parameters:
   - **page**: (Optional) The page number for paginated results.
-  - **size**: (Optional) The number of transactions per page.
+  - **size**: (Optional) The number of rooms per page.
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
@@ -361,7 +361,21 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```json
 {
   "responseCode": "string",
-  "responseMessage": "string"
+  "responseMessage": "string",
+  "data": {
+    "room_id": "uuid",
+    "room_details": {
+      "room_details_id": "uuid",
+      "room_type": "string",
+      "capacity": int,
+      "facility": [
+        "string",
+        "string"
+      ]
+    },
+    "name": "string",
+    "status": "string"
+  }
 }
 ```
 
@@ -525,7 +539,16 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```json
 {
   "responseCode": "string",
-  "responseMessage": "string"
+  "responseMessage": "string",
+  "data": {
+    "id": "uuid",
+    "employee_id": "uuid",
+    "room_id": "uuid",
+    "start_date": "date",
+    "end_date": "date",
+    "description": "string",
+    "status": "string"
+  }
 }
 ```
 
@@ -554,7 +577,11 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 {
   "responseCode": "string",
   "responseMessage": "string",
-  "data": "string"
+  "data": {
+    "approved_by": "string",
+    "approval_status": "string",
+    "description": "string"
+  }
 }
 ```
 

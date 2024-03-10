@@ -84,7 +84,7 @@ func (c transactionsDelivery) CreateTransactions(ctx *gin.Context) {
 		return
 	}
 
-	err := c.transactionsUC.CreateTransactions(req)
+	data, err := c.transactionsUC.CreateTransactions(req)
 	if err != nil {
 		if err.Error() == "01" {
 			json.NewResponseError(ctx, "err", "03", "03")
@@ -115,7 +115,7 @@ func (c transactionsDelivery) CreateTransactions(ctx *gin.Context) {
 		return
 	}
 
-	json.NewResponseCreatedSuccess(ctx, "Transactions created successfully", "03", "03")
+	json.NewResponseCreatedSuccess(ctx, data, "Transactions created successfully", "03", "03")
 }
 
 func (c transactionsDelivery) UpdateTransactions(ctx *gin.Context) {
@@ -146,7 +146,7 @@ func (c transactionsDelivery) UpdateTransactions(ctx *gin.Context) {
 		return
 	}
 
-	err = c.transactionsUC.UpdateTrxLog(trxData)
+	data, err := c.transactionsUC.UpdateTrxLog(trxData)
 	if err != nil {
 		if err.Error() == "01" {
 			json.NewResponseBadRequest(ctx, nil, "Employee ID not found on our records", "03", "04")
@@ -162,7 +162,7 @@ func (c transactionsDelivery) UpdateTransactions(ctx *gin.Context) {
 		return
 	}
 
-	json.NewResponseSuccess(ctx, "Transaction log updated successfully", nil, "success", "03", "04")
+	json.NewResponseSuccess(ctx, data, nil, "Transaction log updated successfully", "03", "04")
 }
 
 func (c transactionsDelivery) RetrieveTrxLogBydID(ctx *gin.Context) {

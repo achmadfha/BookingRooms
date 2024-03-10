@@ -350,11 +350,17 @@ func (t transactionsRepository) RetrieveTrxLogByID(trxLogID string) (transaction
 	return trxLog, err
 }
 
-func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startDate string, endDate string) ([]transactionsDto.TransactionLog, error) {
+func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startDate string, endDate string) ([]transactionsDto.TransactionLogResponse, error) {
 	offset := (page - 1) * pageSize
 	limit := pageSize
 
-	query := `SELECT transaction_log_id, transaction_id, approved_by, approval_status, description, created_at, updated_at FROM transaction_logs WHERE created_at BETWEEN $1 and $2 LIMIT $3 OFFSET $4`
+	query := `
+    SELECT tl.transaction_log_id, tl.transaction_id, COALESCE(e.full_name, 'pending for approval') AS approved_by, tl.approval_status, COALESCE(tl.description, 'pending for approval') AS description, tl.created_at, tl.updated_at
+    FROM transaction_logs tl
+    LEFT JOIN employee e ON tl.approved_by = e.employee_id
+    WHERE tl.created_at BETWEEN $1 AND $2
+    LIMIT $3 OFFSET $4
+    `
 
 	rows, err := t.db.Query(query, startDate, endDate, limit, offset)
 	if err != nil {
@@ -362,13 +368,13 @@ func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startD
 	}
 	defer rows.Close()
 
-	var allTrxLogs []transactionsDto.TransactionLog
+	var allTrxLogs []transactionsDto.TransactionLogResponse
 	for rows.Next() {
-		var allTrxLog transactionsDto.TransactionLog
+		var allTrxLog transactionsDto.TransactionLogResponse
+
 		err := rows.Scan(&allTrxLog.TransactionLogID, &allTrxLog.TransactionsID, &allTrxLog.ApprovedBy, &allTrxLog.ApprovalStatus, &allTrxLog.Descriptions, &allTrxLog.CreatedAt, &allTrxLog.UpdatedAt)
 		if err != nil {
-			errors.New(fmt.Sprintf("Error scanning transactions row: %s", err))
-			continue
+			return nil, errors.New(fmt.Sprintf("Error scanning transactions row: %s", err))
 		}
 
 		allTrxLogs = append(allTrxLogs, allTrxLog)
@@ -378,7 +384,7 @@ func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startD
 		return nil, errors.New(fmt.Sprintf("Error iterating through allTrxLogs rows: %s", err))
 	}
 
-	return allTrxLogs, err
+	return allTrxLogs, nil
 }
 
 func (t transactionsRepository) CountAllTrxLogs(startDate string, endDate string) (int, error) {
