@@ -35,8 +35,235 @@ All endpoints in this collection share a common base path: `/api/v1/`. Ensure th
 All endpoints in this API require authentication using JWT (JSON Web Tokens). To access any endpoint, you must include a valid JWT token in the Authorization header of your requests.
 
 ## Endpoints
+
+### Authentication Login Employee
+
+#### Endpoint: `/auth/login`
+
+- **Description**: This endpoint is used to log in to the system using basic authentication.
+- **Methods**:
+  - `POST`: Authenticate employee credentials and retrieve an access token.
+- **Header**:
+  - `Authorization`: `Basic Auth admin:admin`
+- **Request**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": {
+    "access_token": "string"
+  }
+}
+```
+
+#### Endpoint: `/auth/password`
+
+- **Description**: This endpoint is used to update the password of a user.
+- **Methods**:
+  - `POST`: Change user password.
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Request**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "username": "string",
+  "oldPassword": "string",
+  "newPassword": "string",
+  "confirmPassword": "string"
+}
+```
+
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string"
+}
+```
+
+### Employee Management
+
+#### Endpoint: `/employee`
+
+- **Description**: Retrieve all employee data using this endpoint.
+- **Methods**:
+  - `GET`: Retrieve a list of employee.
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- Optional Parameters:
+  - **page**: (Optional) The page number for paginated results.
+  - **size**: (Optional) The number of transactions per page.
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+    "responseCode": "string",
+    "responseMessage": "string",
+    "data": [
+        {
+            "employeeId": "uuid",
+            "fullName": "string",
+            "division": "string",
+            "phoneNumber": "string",
+            "position" : "string"
+        },
+        {
+            "employeeId": "uuid",
+            "fullName": "string",
+            "division": "string",
+            "phoneNumber": "string",
+            "position" : "string"
+        }
+    ],
+    "paging": {
+        "page": int,
+        "totalPages": int,
+        "totalData": int
+    }
+}
+```
+
+#### Endpoint: `/employee`
+
+- **Description**: This endpoint allows you to create a new employee.
+- **Methods**: `POST`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Body** :
+
+```json
+{
+  "fullName": "string",
+  "division": "string",
+  "phoneNumber": "string",
+  "position": "string",
+  "username": "string"
+}
+```
+
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": {
+    "employeeId": "uuid",
+    "fullName": "string",
+    "division": "string",
+    "phoneNumber": "string",
+    "position": "string",
+    "username": "string"
+  }
+}
+```
+
+#### Endpoint: `/employee/:id`
+
+- **Description**: Retrieve a specific employee by its ID.
+- **Methods**: `GET`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": {
+    "employeeId": "string",
+    "fullName": "string",
+    "division": "string",
+    "phoneNumber": "string",
+    "position": "string"
+  }
+}
+```
+
+#### Endpoint: `/employee/:id`
+
+- **Description**: This endpoint allows you to update employee.
+- **Methods**: `PUT`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Body** :
+  - field body are optional, update fields u want
+
+```json
+{
+  "fullName": "string",
+  "division": "string",
+  "phoneNumber": "string",
+  "position": "string"
+}
+```
+
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": {
+    "employeeId": "uuid",
+    "fullName": "string",
+    "division": "string",
+    "phoneNumber": "string",
+    "position": "string"
+  }
+}
+```
+
+#### Endpoint: `/employee/:id`
+
+- **Description**: Delete a specific employee by its ID.
+- **Methods**: `DELETE`
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": "string"
+}
+```
+
 ### Room Management
+
 #### Endpoint: `/room`
+
 - **Description**: Retrieve all room data using this endpoint.
 - **Methods**:
   - `GET`: Retrieve a list of room.
@@ -48,6 +275,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
+
 ```json
 {
     "responseCode": "string",
@@ -73,7 +301,8 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     }
 }
 ```
-#### Endpoint: `/transactions/:id`
+
+#### Endpoint: `/room/:id`
 
 - **Description**: Retrieve a specific room by its ID.
 - **Methods**: `GET`
@@ -82,6 +311,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
+
 ```json
 {
     "responseCode": "string",
@@ -102,12 +332,15 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     }
 }
 ```
+
 #### Endpoint: `/room`
+
 - **Description**: This endpoint allows you to create a new room.
 - **Methods**: `POST`
 - **Header**:
   - `Authorization`: `Bearer <your JWT token>`
 - **Body** :
+
 ```json
 {
     "name": "string",
@@ -120,22 +353,27 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     ]
 }
 ```
+
 - **Response**:
   - **Status Code**: 201 Created
   - **Body**:
+
 ```json
 {
-    "responseCode": "string",
-    "responseMessage": "string"
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
+
 #### Endpoint: `/room/:id`
+
 - **Description**: This endpoint allows you to update room.
 - **Methods**: `PUT`
 - **Header**:
   - `Authorization`: `Bearer <your JWT token>`
 - **Body** :
-  - field body are optional, update fields u want 
+  - field body are optional, update fields u want
+
 ```json
 {
     "name": "string",
@@ -148,33 +386,35 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     ]
 }
 ```
+
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
+
 ```json
 {
-    "responseCode": "string",
-    "responseMessage": "string"
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
 
-
-
 ### Transactions Management
+
 #### Endpoint: `/transactions`
+
 - **Description**: Retrieve all transaction data using this endpoint.
 - **Methods**:
-    - `GET`: Retrieve a list of transactions.
+  - `GET`: Retrieve a list of transactions.
 - **Header**:
   - `Authorization`: `Bearer <your JWT token>`
 - Optional Parameters:
-    - **page**: (Optional) The page number for paginated results.
-    - **size**: (Optional) The number of transactions per page.
-    - **startDate**: (Optional) The start date for filtering transactions.
-    - **endDate**: (Optional) The end date for filtering transactions.
+  - **page**: (Optional) The page number for paginated results.
+  - **size**: (Optional) The number of transactions per page.
+  - **startDate**: (Optional) The start date for filtering transactions.
+  - **endDate**: (Optional) The end date for filtering transactions.
 - **Response**:
-    - **Status Code**: 200 OK
-    - **Body**:
+  - **Status Code**: 200 OK
+  - **Body**:
 
 ```json
 {
@@ -211,6 +451,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
   }
 }
 ```
+
 #### Endpoint: `/transactions/:id`
 
 - **Description**: Retrieve a specific transaction by its ID.
@@ -221,6 +462,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
+
 ```json
 {
     "responseCode": "string",
@@ -257,6 +499,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     }
 }
 ```
+
 #### Endpoint: `/transactions`
 
 - **Description**: This endpoint allows you to create a new transaction.
@@ -267,11 +510,11 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-    "employee_id": "uuid",
-    "room_id" : "uuid",
-    "start_date" : "date",
-    "end_date" : "date",
-    "description" : "string"
+  "employee_id": "uuid",
+  "room_id": "uuid",
+  "start_date": "date",
+  "end_date": "date",
+  "description": "string"
 }
 ```
 
@@ -281,15 +524,15 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-    "responseCode": "string",
-    "responseMessage": "string"
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
 
 #### Endpoint: `/transactions/logs/:id`
 
 - **Description**: This endpoint allows you to accept or decline a transaction.
-- **Methods**: 
+- **Methods**:
   - `PUT` : `/:id` use ur transactions log id
 - **Header**:
   - `Authorization`: `Bearer <your JWT token>`
@@ -376,7 +619,9 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
   }
 }
 ```
+
 #### Endpoint: `/transactions/logs`
+
 - **Description**: Retrieve all log transaction data using this endpoint.
 - **Methods**:
   - `GET`: Retrieve a list of transaction logs.
