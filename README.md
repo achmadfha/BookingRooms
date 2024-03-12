@@ -271,7 +271,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
   - `Authorization`: `Bearer <your JWT token>`
 - Optional Parameters:
   - **page**: (Optional) The page number for paginated results.
-  - **size**: (Optional) The number of rooms per page.
+  - **size**: (Optional) The number of transactions per page.
 - **Response**:
   - **Status Code**: 200 OK
   - **Body**:
@@ -361,21 +361,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```json
 {
   "responseCode": "string",
-  "responseMessage": "string",
-  "data": {
-    "room_id": "uuid",
-    "room_details": {
-      "room_details_id": "uuid",
-      "room_type": "string",
-      "capacity": int,
-      "facility": [
-        "string",
-        "string"
-      ]
-    },
-    "name": "string",
-    "status": "string"
-  }
+  "responseMessage": "string"
 }
 ```
 
@@ -539,16 +525,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 ```json
 {
   "responseCode": "string",
-  "responseMessage": "string",
-  "data": {
-    "id": "uuid",
-    "employee_id": "uuid",
-    "room_id": "uuid",
-    "start_date": "date",
-    "end_date": "date",
-    "description": "string",
-    "status": "string"
-  }
+  "responseMessage": "string"
 }
 ```
 
@@ -577,11 +554,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 {
   "responseCode": "string",
   "responseMessage": "string",
-  "data": {
-    "approved_by": "string",
-    "approval_status": "string",
-    "description": "string"
-  }
+  "data": "string"
 }
 ```
 
@@ -692,5 +665,155 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
     "totalPages": int,
     "totalData": int
   }
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year/:month/:day`
+
+- **Description**: Retrieve transaction report data based on day.
+- **Methods**:
+  - `GET`: `/:year/:month/:day` use ur transactions day
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year/:month`
+
+- **Description**: Retrieve transaction report data based on month.
+- **Methods**:
+  - `GET`: `/:year/:month` use ur transactions month
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year`
+
+- **Description**: Retrieve transaction report data based on year.
+- **Methods**:
+  - `GET`: `/:year` use ur transactions year
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year/:month/:day/export`
+
+- **Description**: export data to excel based on days.
+- **Methods**:
+  - `GET`: `/:year/:month/:day` use ur transactions day for export
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string"
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year/:month/export`
+
+- **Description**: export data to excel based on months.
+- **Methods**:
+  - `GET`: `/:year/:month/:day` use ur transactions month for export
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string"
+}
+```
+
+#### Endpoint: `/transactions/report/daily/:year/export`
+
+- **Description**: export data to excel based on years.
+- **Methods**:
+  - `GET`: `/:year/:month/:day` use ur transactions year for export
+- **Header**:
+  - `Authorization`: `Bearer <your JWT token>`
+- **Response**:
+  - **Status Code**: 200 OK
+  - **Body**:
+
+```json
+{
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```

@@ -3,8 +3,7 @@ package reportDelivery
 import (
 	"BookingRoom/model/dto/json"
 	Report "BookingRoom/src/report"
-	"net/http"
-	"os"
+	"fmt"
 	"path/filepath"
 	"time"
 
@@ -39,7 +38,7 @@ func (h *ReportDelivery) GetDaily(c *gin.Context) {
 	day := c.Param("day")
 	transactions, err := h.reportUC.GetDailyTransaction(year, month, day)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "01", "01")
 		return
 	}
 
@@ -51,7 +50,7 @@ func (h *ReportDelivery) GetMonthly(c *gin.Context) {
 	month := c.Param("month")
 	transactions, err := h.reportUC.GetMonthlyTransaction(year, month)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "02", "01")
 		return
 	}
 
@@ -62,7 +61,7 @@ func (h *ReportDelivery) GetYear(c *gin.Context) {
 	year := c.Param("year")
 	transactions, err := h.reportUC.GetYearTransaction(year)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "03", "01")
 		return
 	}
 
@@ -74,9 +73,16 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 	month := c.Param("month")
 	day := c.Param("day")
 	formatDate := time.Now().Format("2006-01-02")
+
 	transactions, err := h.reportUC.GetDailyTransactionReport(year, month, day)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "01", "02")
+		return
+	}
+
+	mostCommonRoomName, err := h.reportUC.GetMostFrequentRoomNamesDay(year, month, day)
+	if err != nil {
+		json.NewResponseError(c, err.Error(), "01", "03")
 		return
 	}
 
@@ -85,16 +91,18 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 	sheetName := "Daily Transactions " + formatDate
 	sheet, err := file.AddSheet(sheetName)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "01", "04")
 		return
 	}
 
-	headers := []string{"Transaction_id", "Employee_id", "Room_id", "StartDate", "Description", "EndDate", "Status", "Created_at", "Updated_at", "Jumlah_Transaksi"}
+	headers := []string{"Transaction_id", "FullName", "Room Name", "StartDate", "Description", "EndDate", "Approval Status", "Approved BY", "Created_at", "Updated_at"}
 	headerRow := sheet.AddRow()
 	for _, header := range headers {
 		cell := headerRow.AddCell()
 		cell.SetString(header)
 	}
+
+	totalTransactions := 0
 
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
@@ -104,32 +112,37 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Status)
+		dataRow.AddCell().SetString(transaction.Approval_status)
+		dataRow.AddCell().SetString(transaction.Approved_by)
 		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Jumlah)
+
+		totalTransactions++
+
 	}
+
+	totalRow := sheet.AddRow()
+	totalRow.AddCell().SetString("TOTAL TRANSACTION")
+	totalRow.AddCell().SetString(fmt.Sprintf("%d", totalTransactions))
+
+	mostCommonRoomRow := sheet.AddRow()
+	mostCommonRoomRow.AddCell().SetString("COMMON ROOM ")
+	mostCommonRoomRow.AddCell().SetString(mostCommonRoomName)
 
 	excelDirectory := "./.excel"
 	excelFilename := "daily_transactions_" + formatDate + ".xlsx"
 	excelFilePath := filepath.Join(excelDirectory, excelFilename)
 	if err := file.Save(excelFilePath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "01", "05")
 		return
 	}
 
-	fileContent, err := os.ReadFile(excelFilePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "01", "06")
 		return
 	}
 
 	json.NewResponseSuccess(c, nil, nil, "Data Berhasil Di Export", "01", "02")
-
-	c.Writer.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+excelFilename)
-	http.ServeFile(c.Writer, c.Request, excelFilePath)
-	c.Writer.Write(fileContent)
 
 }
 
@@ -139,7 +152,13 @@ func (h *ReportDelivery) ExportMonthlyTransactionsCSV(c *gin.Context) {
 	formatDate := time.Now().Format("2006-01-02")
 	transactions, err := h.reportUC.GetMonthlyTransactionReport(year, month)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "02", "02")
+		return
+	}
+
+	mostCommonRoomName, err := h.reportUC.GetMostFrequentRoomNameMonths(year, month)
+	if err != nil {
+		json.NewResponseError(c, err.Error(), "02", "03")
 		return
 	}
 
@@ -148,16 +167,18 @@ func (h *ReportDelivery) ExportMonthlyTransactionsCSV(c *gin.Context) {
 	sheetName := "Monthly Transactions " + formatDate
 	sheet, err := file.AddSheet(sheetName)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "02", "04")
 		return
 	}
 
-	headers := []string{"Transaction_id", "Employee_id", "Room_id", "StartDate", "Description", "EndDate", "Status", "Created_at", "Updated_at", "Jumlah_Transaksi"}
+	headers := []string{"Transaction_id", "FullName", "Room Name", "StartDate", "Description", "EndDate", "Approval Status", "Approved BY", "Created_at", "Updated_at"}
 	headerRow := sheet.AddRow()
 	for _, header := range headers {
 		cell := headerRow.AddCell()
 		cell.SetString(header)
 	}
+
+	totalTransactions := 0
 
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
@@ -167,32 +188,36 @@ func (h *ReportDelivery) ExportMonthlyTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Status)
+		dataRow.AddCell().SetString(transaction.Approval_status)
+		dataRow.AddCell().SetString(transaction.Approved_by)
 		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Jumlah)
+
+		totalTransactions++
 	}
+
+	totalRow := sheet.AddRow()
+	totalRow.AddCell().SetString("TOTAL TRANSACTION")
+	totalRow.AddCell().SetString(fmt.Sprintf("%d", totalTransactions))
+
+	mostCommonRoomRow := sheet.AddRow()
+	mostCommonRoomRow.AddCell().SetString("COMMON ROOM")
+	mostCommonRoomRow.AddCell().SetString(mostCommonRoomName)
 
 	excelDirectory := "./.excel"
 	excelFilename := "Monthly_transactions_" + formatDate + ".xlsx"
 	excelFilePath := filepath.Join(excelDirectory, excelFilename)
 	if err := file.Save(excelFilePath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "02", "05")
 		return
 	}
 
-	fileContent, err := os.ReadFile(excelFilePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "02", "06")
 		return
 	}
 
 	json.NewResponseSuccess(c, nil, nil, "Data Berhasil Di Export", "02", "02")
-
-	c.Writer.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+excelFilename)
-	http.ServeFile(c.Writer, c.Request, excelFilePath)
-	c.Writer.Write(fileContent)
 
 }
 
@@ -201,7 +226,13 @@ func (h *ReportDelivery) ExportYearTransactionsCSV(c *gin.Context) {
 	formatDate := time.Now().Format("2006-01-02")
 	transactions, err := h.reportUC.GetYearTransactionReport(year)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "03", "02")
+		return
+	}
+
+	mostCommonRoomName, err := h.reportUC.GetMostFrequentRoomNameYears(year)
+	if err != nil {
+		json.NewResponseError(c, err.Error(), "03", "03")
 		return
 	}
 
@@ -210,16 +241,18 @@ func (h *ReportDelivery) ExportYearTransactionsCSV(c *gin.Context) {
 	sheetName := "Year Transactions " + formatDate
 	sheet, err := file.AddSheet(sheetName)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "03", "04")
 		return
 	}
 
-	headers := []string{"Transaction_id", "Employee_id", "Room_id", "StartDate", "Description", "EndDate", "Status", "Created_at", "Updated_at", "Jumlah_Transaksi"}
+	headers := []string{"Transaction_id", "FullName", "Room Name", "StartDate", "Description", "EndDate", "Approval Status", "Approved BY", "Created_at", "Updated_at"}
 	headerRow := sheet.AddRow()
 	for _, header := range headers {
 		cell := headerRow.AddCell()
 		cell.SetString(header)
 	}
+
+	totalTransactions := 0
 
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
@@ -229,31 +262,35 @@ func (h *ReportDelivery) ExportYearTransactionsCSV(c *gin.Context) {
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Status)
+		dataRow.AddCell().SetString(transaction.Approval_status)
+		dataRow.AddCell().SetString(transaction.Approved_by)
 		dataRow.AddCell().SetString(transaction.Created_at.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Updated_at.Format("2006-01-02"))
-		dataRow.AddCell().SetString(transaction.Jumlah)
+
+		totalTransactions++
 	}
+
+	totalRow := sheet.AddRow()
+	totalRow.AddCell().SetString("TOTAL TRANSACTION")
+	totalRow.AddCell().SetString(fmt.Sprintf("%d", totalTransactions))
+
+	mostCommonRoomRow := sheet.AddRow()
+	mostCommonRoomRow.AddCell().SetString("COMMON ROOM")
+	mostCommonRoomRow.AddCell().SetString(mostCommonRoomName)
 
 	excelDirectory := "./.excel"
 	excelFilename := "Year_transactions_" + formatDate + ".xlsx"
 	excelFilePath := filepath.Join(excelDirectory, excelFilename)
 	if err := file.Save(excelFilePath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "03", "05")
 		return
 	}
 
-	fileContent, err := os.ReadFile(excelFilePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		json.NewResponseError(c, err.Error(), "03", "06")
 		return
 	}
 
-	json.NewResponseSuccess(c, nil, nil, "Data Berhasil Di Export", "02", "02")
-
-	c.Writer.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+excelFilename)
-	http.ServeFile(c.Writer, c.Request, excelFilePath)
-	c.Writer.Write(fileContent)
+	json.NewResponseSuccess(c, nil, nil, "Data Berhasil Di Export", "03", "02")
 
 }
