@@ -13,3 +13,6 @@
 {"level":"info","time":"11-03-2024 00:46:12","message":"Try connect to database..."}
 {"level":"info","time":"11-03-2024 00:46:12","message":"Database connected successfully"}
 {"level":"info","time":"11-03-2024 00:46:12","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
+{"level":"info","time":"11-03-2024 00:47:33","message":"Try connect to database..."}
+{"level":"info","time":"11-03-2024 00:47:33","message":"Database connected successfully"}
+{"level":"info","time":"11-03-2024 00:47:33","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}

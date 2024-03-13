@@ -2,6 +2,7 @@ package reportDelivery
 
 import (
 	"BookingRoom/model/dto/json"
+	"BookingRoom/pkg/middleware"
 	Report "BookingRoom/src/report"
 	"fmt"
 	"path/filepath"
@@ -22,12 +23,12 @@ func NewReportDelivery(v1Group *gin.RouterGroup, reportUC Report.ReportUsecase) 
 
 	reportGroup := v1Group.Group("/transaction/report")
 	{
-		reportGroup.GET("/daily/:year/:month/:day", handler.GetDaily)
-		reportGroup.GET("/daily/:year/:month/:day/export", handler.ExportDailyTransactionsCSV)
-		reportGroup.GET("/monthly/:year/:month", handler.GetMonthly)
-		reportGroup.GET("/monthly/:year/:month/export", handler.ExportMonthlyTransactionsCSV)
-		reportGroup.GET("/year/:year", handler.GetYear)
-		reportGroup.GET("/year/:year/export", handler.ExportYearTransactionsCSV)
+		reportGroup.GET("/daily/:year/:month/:day", middleware.JWTAuth("ADMIN", "GA"), handler.GetDaily)
+		reportGroup.GET("/daily/:year/:month/:day/export", middleware.JWTAuth("ADMIN", "GA"), handler.ExportDailyTransactionsCSV)
+		reportGroup.GET("/monthly/:year/:month", middleware.JWTAuth("ADMIN", "GA"), handler.GetMonthly)
+		reportGroup.GET("/monthly/:year/:month/export", middleware.JWTAuth("ADMIN", "GA"), handler.ExportMonthlyTransactionsCSV)
+		reportGroup.GET("/year/:year", middleware.JWTAuth("ADMIN", "GA"), handler.GetYear)
+		reportGroup.GET("/year/:year/export", middleware.JWTAuth("ADMIN", "GA"), handler.ExportYearTransactionsCSV)
 
 	}
 }
