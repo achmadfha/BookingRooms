@@ -108,8 +108,8 @@ func (h *ReportDelivery) ExportDailyTransactionsCSV(c *gin.Context) {
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
 		dataRow.AddCell().SetString(transaction.Transaction_id)
-		dataRow.AddCell().SetString(transaction.Employee_id)
-		dataRow.AddCell().SetString(transaction.Room_id)
+		dataRow.AddCell().SetString(transaction.FullName)
+		dataRow.AddCell().SetString(transaction.RoomName)
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
@@ -184,8 +184,8 @@ func (h *ReportDelivery) ExportMonthlyTransactionsCSV(c *gin.Context) {
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
 		dataRow.AddCell().SetString(transaction.Transaction_id)
-		dataRow.AddCell().SetString(transaction.Employee_id)
-		dataRow.AddCell().SetString(transaction.Room_id)
+		dataRow.AddCell().SetString(transaction.FullName)
+		dataRow.AddCell().SetString(transaction.RoomName)
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
@@ -258,8 +258,8 @@ func (h *ReportDelivery) ExportYearTransactionsCSV(c *gin.Context) {
 	for _, transaction := range transactions {
 		dataRow := sheet.AddRow()
 		dataRow.AddCell().SetString(transaction.Transaction_id)
-		dataRow.AddCell().SetString(transaction.Employee_id)
-		dataRow.AddCell().SetString(transaction.Room_id)
+		dataRow.AddCell().SetString(transaction.FullName)
+		dataRow.AddCell().SetString(transaction.RoomName)
 		dataRow.AddCell().SetString(transaction.StartDate.Format("2006-01-02"))
 		dataRow.AddCell().SetString(transaction.Description)
 		dataRow.AddCell().SetString(transaction.EndDate.Format("2006-01-02"))
