@@ -1,0 +1,3 @@
+{"level":"info","time":"13-03-2024 07:11:20","message":"Try connect to database..."}
+{"level":"info","time":"13-03-2024 07:11:20","message":"Database connected successfully"}
+{"level":"info","time":"13-03-2024 07:11:20","caller":"C:/Users/ray/Documents/booking-rooms/app/app.go:145","message":"Service running versions 0.0.1"}
