@@ -16,13 +16,11 @@ services:
       - POSTGRES_PASSWORD=StrongPassword123!
       - POSTGRES_DATABASE=booking-roomsdb
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - booking-rooms-backup:/var/lib/postgresql/data
     networks:
       - bookingrooms_net
 volumes:
-  pgdata:
-    external: true
-    name: booking-rooms-backup
+  booking-rooms-backup:
 networks:
-    bookingrooms_net:
-      driver : brigde
+  bookingrooms_net:
+    driver: bridge
