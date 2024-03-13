@@ -17,5 +17,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=build /app/booking-room /app/booking-room
+RUN ls -la /app
+RUN cat /app/.env
 
 ENTRYPOINT ["/app/booking-room"]
