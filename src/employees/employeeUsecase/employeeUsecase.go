@@ -1,11 +1,11 @@
 package employeeUsecase
 
 import (
-	"BookingRoom/model/dto"
-	"BookingRoom/pkg/utils"
+	"BookingRoom/model/dto/employeesDto"
+	"BookingRoom/model/dto/json"
 	"BookingRoom/src/employees"
-	"errors"
-	"fmt"
+	"math"
+	"strconv"
 )
 
 type employeeUC struct {
@@ -16,24 +16,116 @@ func NewEmployeeUsecase(employeeRepo employees.EmployeeRepository) employees.Emp
 	return &employeeUC{employeeRepo}
 }
 
-func (e *employeeUC) Login(employees dto.LoginRequest) (token string, err error) {
-	emp, err := e.employeeRepo.RetrieveEmployees(employees.Username)
+func (e *employeeUC) GetEmployee(page, size string) (employee []employeesDto.Employees, pagination interface{}, err error) {
+	employee, err = e.employeeRepo.RetrieveEmployee()
 	if err != nil {
-		fmt.Println("Error Usecase > repo: ", err.Error())
-		if err.Error() == "no rows" {
-			return "", errors.New("01")
+		return nil, nil, err
+	}
+
+	var pageInt, sizeInt int
+	if page != "" {
+		pageInt, err = strconv.Atoi(page)
+		if err != nil || pageInt < 1 {
+			return
 		}
-		return "", err
+	} else {
+		pageInt = 1
 	}
 
-	if err = utils.VerifyPassword(emp.Password, employees.Password); err != nil {
-		return "", errors.New("02")
+	if size != "" {
+		sizeInt, err = strconv.Atoi(size)
+		if err != nil {
+			return
+		}
+	} else {
+		sizeInt = 5
 	}
 
-	token, err = utils.GenerateToken(emp.EmployeeId, string(emp.Position))
+	totalData, err := e.employeeRepo.CountEmployees(pageInt, sizeInt)
 	if err != nil {
-		return "", err
+		return nil, nil, err
 	}
 
-	return token, err
+	totalPages := int(math.Ceil(float64(totalData) / float64(sizeInt)))
+	if pageInt > totalPages {
+		return nil, json.Pagination{}, err
+	}
+
+	if totalPages == 0 && totalData > 0 {
+		totalPages = 1
+	}
+
+	pagination = json.Pagination{
+		CurrentPage:  pageInt,
+		TotalPages:   totalPages,
+		TotalRecords: totalData,
+	}
+
+	return employee, pagination, nil
+}
+
+func (e *employeeUC) GetEmployeeById(id string) (employeesDto.Employees, error) {
+	employee, err := e.employeeRepo.RetrieveEmployeeById(id)
+	if err != nil {
+		return employeesDto.Employees{}, err
+	}
+
+	return employee, nil
+}
+
+func (e *employeeUC) StoreEmployee(employee *employeesDto.Employees) error {
+	err := e.employeeRepo.CreateEmployees(employee)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *employeeUC) UpdateEmployee(employee employeesDto.Employees) error {
+
+	// Validasi
+	oldData, err := e.employeeRepo.RetrieveEmployeeById(employee.EmployeeId.String())
+	if err != nil {
+		return err
+	}
+
+	if employee.FullName == "" {
+		employee.FullName = oldData.FullName
+	}
+	if employee.Division == "" {
+		employee.Division = oldData.Division
+	}
+	if employee.PhoneNumber == "" {
+		employee.PhoneNumber = oldData.PhoneNumber
+	}
+	if employee.Position == "" {
+		employee.Position = oldData.Position
+	}
+	if employee.Username == "" {
+		employee.Username = oldData.Username
+	}
+
+	err = e.employeeRepo.RenewEmployee(employee)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *employeeUC) DeleteEmployeeById(id string) error {
+	// Validasi id jika diperlukan
+
+	_, err := e.employeeRepo.RetrieveEmployeeById(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepo.RemoveEmployeeById(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

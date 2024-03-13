@@ -681,22 +681,22 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
-    "data": [
-        {
-            "transaksi_id": "uuid",
-            "full_name": "string",
-            "room_name": "string",
-            "start_date": "date",
-            "end_date": "date",
-            "description": "string",
-            "created_at": "date",
-            "updated_at": "date",
-            "approved_by": "string",
-            "approval_status": "string"
-        }
-    ]
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
 }
 ```
 
@@ -713,22 +713,22 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
-    "data": [
-        {
-            "transaksi_id": "uuid",
-            "full_name": "string",
-            "room_name": "string",
-            "start_date": "date",
-            "end_date": "date",
-            "description": "string",
-            "created_at": "date",
-            "updated_at": "date",
-            "approved_by": "string",
-            "approval_status": "string"
-        }
-    ]
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
 }
 ```
 
@@ -745,22 +745,22 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
-    "data": [
-        {
-            "transaksi_id": "uuid",
-            "full_name": "string",
-            "room_name": "string",
-            "start_date": "date",
-            "end_date": "date",
-            "description": "string",
-            "created_at": "date",
-            "updated_at": "date",
-            "approved_by": "string",
-            "approval_status": "string"
-        }
-    ]
+  "responseCode": "string",
+  "responseMessage": "string",
+  "data": [
+    {
+      "transaksi_id": "uuid",
+      "full_name": "string",
+      "room_name": "string",
+      "start_date": "date",
+      "end_date": "date",
+      "description": "string",
+      "created_at": "date",
+      "updated_at": "date",
+      "approved_by": "string",
+      "approval_status": "string"
+    }
+  ]
 }
 ```
 
@@ -777,8 +777,8 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
 
@@ -795,8 +795,8 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
 
@@ -813,7 +813,7 @@ All endpoints in this API require authentication using JWT (JSON Web Tokens). To
 
 ```json
 {
-   "responseCode": "string",
-    "responseMessage": "string",
+  "responseCode": "string",
+  "responseMessage": "string"
 }
 ```
