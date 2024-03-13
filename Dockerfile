@@ -6,8 +6,6 @@ WORKDIR /app
 
 COPY . .
 
-COPY .env .
-
 RUN go mod download
 
 RUN go build -o booking-room
@@ -17,7 +15,5 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=build /app/booking-room /app/booking-room
-RUN ls -la /app
-RUN cat /app/.env
 
 ENTRYPOINT ["/app/booking-room"]
