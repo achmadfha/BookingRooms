@@ -3,7 +3,7 @@ services:
   booking-rooms:
     build: .
     env_file:
-      - /home/ubuntu/booking-rooms/.env
+      - .env
     ports:
       - "8080:8080"
     networks:
