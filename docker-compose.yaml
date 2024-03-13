@@ -14,7 +14,7 @@ services:
     image: postgres:alpine
     environment:
       - POSTGRES_PASSWORD=StrongPassword123!
-      - POSTGRES_DATABASE=booking-roomsdb
+      - POSTGRES_DB=booking-roomsdb
     volumes:
       - booking-rooms-backup:/var/lib/postgresql/data
     networks:
