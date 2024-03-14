@@ -1,34 +1,107 @@
--- Insert data into employee table
-INSERT INTO employee (employee_id, full_name, division, phone_number, position, username, password)
-VALUES
-    ('11111111-1111-1111-1111-111111111111', 'John Doe', 'Marketing', '1234567890', 'ADMIN', 'admin', '$2a$12$kFwAXX9ZyMrgl.NQcqkT6.5pdhippVeiP5lDUTpPI897FO6cK4NOe'),
-    ('22222222-2222-2222-2222-222222222222', 'Jane Smith', 'HR', '9876543210', 'EMPLOYEE', 'employee', '$2a$12$1UJ.J1qySbNdL/cOUeiuTO6gm9mZvj.VVPtaQ/J8xxhuPgkhzc79y'),
-    ('33333333-3333-3333-3333-333333333333', 'Michael Johnson', 'Finance', '5556667777', 'GA', 'globaladmin', '$2a$12$RyechOUkkmKFde5OvwiMKOHsVGkm4zKW703TMhcSA4z9tsAKM8iPa');
+INSERT INTO employee (employee_id, full_name, division, phone_number, "position", username, password)
+VALUES ('49ae1326-0ef3-4d51-901c-b1a070c875a5', 'John Doe', 'Marketing', '123-456-7890', 'EMPLOYEE', 'johndoe',
+        'password123'),
+       ('8ce1d09d-8421-4a9a-846e-2e306e4deefe', 'Jane Smith', 'HR', '987-654-3210', 'ADMIN', 'janesmith',
+        'password456'),
+       ('ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'Bob Johnson', 'Finance', '555-555-5555', 'GA', 'bjohnson',
+        'password789'),
+       ('4b840078-413c-47af-b438-2f0e85ebcd79', 'Example Admin', 'Marketing', '1234567890', 'ADMIN', 'admin',
+        '$2a$12$kFwAXX9ZyMrgl.NQcqkT6.5pdhippVeiP5lDUTpPI897FO6cK4NOe'),
+       ('38a1d95f-f885-4b3c-bf76-db1e91d6f845', 'Example Employee', 'HR', '9876543210', 'EMPLOYEE', 'employee',
+        '$2a$12$1UJ.J1qySbNdL/cOUeiuTO6gm9mZvj.VVPtaQ/J8xxhuPgkhzc79y'),
+       ('74081987-ec44-4c9d-8ccb-33452cbcbbaf', 'Example GA', 'Finance', '5556667777', 'GA', 'globaladmin',
+        '$2a$12$RyechOUkkmKFde5OvwiMKOHsVGkm4zKW703TMhcSA4z9tsAKM8iPa');
 
--- Insert data into room_details table
+
 INSERT INTO room_details (room_details_id, room_type, capacity, facility)
-VALUES
-    ('44444444-4444-4444-4444-444444444444', 'Meeting Room', 2, ARRAY['Projector', 'Whiteboard', 'Conference Phone']),
-    ('55555555-5555-5555-5555-555555555555', 'Office Cubicle', 4, ARRAY['Desk', 'Chair', 'Computer']),
-    ('66666666-6666-6666-6666-666666666666', 'Conference Room', 3, ARRAY['Projector', 'Whiteboard', 'Conference Table']);
+VALUES ('a8887486-aff2-443b-bfcf-9803c00e2344', 'Single', 1, '{"WiFi","TV"}'),
+       ('5f01a194-c132-4901-a7f2-b1624cb9a2df', 'Double', 2, '{"WiFi","TV","Balcony"}'),
+       ('3de4a13b-59dd-4693-bc73-0c8a15b0bc14', 'Suite', 4, '{"WiFi","TV","Kitchen","Jacuzzi"}'),
+       ('a689fcc9-c82d-42f8-9921-e8d9574de17f', 'VVIP Rooms', 124, '{"WiFi","Snack","Whiteboard"}'),
+       ('5f629cc1-746f-4177-96cb-08e0a8a775e6', 'VVIP Rooms UPDATED', 120, '{"UPDATED"}'),
+       ('3d11de5d-ecb9-4a41-b5e1-df422ac30fb5', 'VVIP Rooms', 150, '{"WiFi","Projector","Whiteboard"}'),
+       ('39097ce5-461e-4be6-ba6a-f2abbf6ec397', 'VVIP Rooms', 250, '{"WiFi","Projector","Whiteboard"}');
 
--- Insert data into room table
 INSERT INTO room (room_id, room_details_id, name, status)
-VALUES
-    ('77777777-7777-7777-7777-777777777777', '44444444-4444-4444-4444-444444444444', 'Room 101', 'AVAILABLE'),
-    ('88888888-8888-8888-8888-888888888888', '55555555-5555-5555-5555-555555555555', 'Room 201', 'BOOKED'),
-    ('99999999-9999-9999-9999-999999999999', '66666666-6666-6666-6666-666666666666', 'Room 301', 'AVAILABLE');
+VALUES ('149bddee-87ce-4a63-96c5-c552cf3d51ef', '5f629cc1-746f-4177-96cb-08e0a8a775e6', 'VVIP 5 UPDATED', 'AVAILABLE'),
+       ('a3edb4e0-d9c1-400a-84b1-55e2aabbfc9b', '3de4a13b-59dd-4693-bc73-0c8a15b0bc14', 'Room 103', 'AVAILABLE'),
+       ('34aa1f02-cf03-4895-adcd-5be49ae63f7d', '5f01a194-c132-4901-a7f2-b1624cb9a2df', 'Room 102', 'AVAILABLE'),
+       ('8ca98942-12b2-4be6-82d5-f62b4a41394e', 'a689fcc9-c82d-42f8-9921-e8d9574de17f', 'VVIP 2', 'AVAILABLE'),
+       ('fb1a357e-cfd8-4731-aeae-f0bec6df8cdd', '39097ce5-461e-4be6-ba6a-f2abbf6ec397', 'FLAMBOYAN III', 'AVAILABLE'),
+       ('10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', 'a8887486-aff2-443b-bfcf-9803c00e2344', 'Room 101', 'AVAILABLE'),
+       ('30db5069-2019-44a1-b876-0faebd8926a3', '3d11de5d-ecb9-4a41-b5e1-df422ac30fb5', 'FLAMBOYAN II', 'AVAILABLE');
 
--- Insert data into transactions table
-INSERT INTO transactions (transaction_id, employee_id, room_id, start_date, end_date, description)
-VALUES
-    ('12345678-1234-1234-1234-123456789012', '11111111-1111-1111-1111-111111111111', '77777777-7777-7777-7777-777777777777', '2024-03-05', '2024-03-07', 'Meeting with clients'),
-    ('23456789-2345-2345-2345-234567890123', '22222222-2222-2222-2222-222222222222', '88888888-8888-8888-8888-888888888888', '2024-03-08', '2024-03-10', 'Team building event'),
-    ('34567890-3456-3456-3456-345678901234', '33333333-3333-3333-3333-333333333333', '99999999-9999-9999-9999-999999999999', '2024-03-11', '2024-03-13', 'Training session');
+INSERT INTO transactions (transaction_id, employee_id, room_id, start_date, end_date, description, status,
+                          created_at, updated_at)
+VALUES ('d2a208f0-098b-4365-a80a-471b9dbcc905', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', '2024-01-01', '2024-01-03', 'Reservation for business trip', 'ACCEPT',
+        '2023-12-06 15:25:54.128046', '2024-03-06 15:25:54.128046'),
+       ('40ab1661-2871-4d20-bc4b-78e2d5d8d102', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', '2024-02-05', '2024-02-07', 'Vacation getaway', 'PENDING',
+        '2024-01-06 15:25:54.128046', '2024-03-06 15:25:54.128046'),
+       ('f16d5a77-3f51-4592-b57f-f466c36a9801', 'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd',
+        '34aa1f02-cf03-4895-adcd-5be49ae63f7d', '2024-03-06', '2024-03-07', 'Meeting client enigma', 'ACCEPT',
+        '2024-03-07 16:41:19.416786', '2024-03-08 16:44:57.845862'),
+       ('ce437b1d-439a-4ab7-a1aa-4b096445b07b', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        'a3edb4e0-d9c1-400a-84b1-55e2aabbfc9b', '2024-03-06', '2024-03-07', 'Meeting client enigma', 'ACCEPT',
+        '2024-03-06 19:14:21.726247', '2024-03-08 17:02:48.015754'),
+       ('7c632f73-52ac-4a79-8114-acc163002831', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '149bddee-87ce-4a63-96c5-c552cf3d51ef', '2024-03-08', '2024-03-10', 'VVIP client meet', 'ACCEPT',
+        '2024-03-08 23:16:25.011953', '2024-03-08 23:19:24.000649'),
+       ('ea5a94ff-4ead-41bf-8022-774d30418866', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', '2024-03-09', '2024-03-11', 'VVIP client meet', 'ACCEPT',
+        '2024-03-09 03:05:18.164471', '2024-03-09 03:13:21.61203'),
+       ('3581ecc2-8222-46ef-aeba-3953749a5d7e', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '34aa1f02-cf03-4895-adcd-5be49ae63f7d', '2024-03-11', '2024-03-13', 'Examples meeting client', 'ACCEPT',
+        '2024-03-10 22:50:12.356702', '2024-03-10 22:51:35.080269'),
+       ('c8f72c63-4182-4ec5-9fcb-d9219a19d409', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', '2024-03-11', '2024-03-13', 'Examples meeting client', 'ACCEPT',
+        '2024-03-10 22:31:33.769856', '2024-03-10 23:08:48.018281'),
+       ('99708bde-50ea-4b53-a1ee-aa617e8c3abc', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '8ca98942-12b2-4be6-82d5-f62b4a41394e', '2024-03-11', '2024-03-13', 'Examples meeting client', 'ACCEPT',
+        '2024-03-10 22:32:49.904358', '2024-03-10 23:10:30.940165'),
+       ('d3e55284-a3a2-4fe6-83c5-ed4d27791218', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '10b38c1a-fd7d-4aba-9003-39f8c5c7d26c', '2024-03-01', '2024-03-12', 'VVIP client meet', 'ACCEPT',
+        '2024-03-10 22:29:50.833956', '2024-03-11 02:07:14.375345'),
+       ('1dc23aea-2061-4802-b500-733d52bf3b3a', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '30db5069-2019-44a1-b876-0faebd8926a3', '2024-03-13', '2024-03-14', 'VVIP client meet', 'ACCEPT',
+        '2024-03-13 09:59:56.966286', '2024-03-13 10:01:00.019405'),
+       ('8d53be8d-7ca9-4efa-96e9-0215e68ec499', '49ae1326-0ef3-4d51-901c-b1a070c875a5',
+        '34aa1f02-cf03-4895-adcd-5be49ae63f7d', '2024-03-13', '2024-03-14', 'VVIP client meet', 'PENDING',
+        '2024-03-13 10:01:22.219944', '2024-03-13 10:01:22.219944');
 
--- Insert data into transaction_logs table
-INSERT INTO transaction_logs (transaction_log_id, transaction_id, approved_by, approval_status, description)
-VALUES
-    ('98765432-9876-9876-9876-987654321098', '12345678-1234-1234-1234-123456789012', '22222222-2222-2222-2222-222222222222', 'ACCEPT', 'Approved meeting request'),
-    ('87654321-8765-8765-8765-876543210987', '23456789-2345-2345-2345-234567890123', '11111111-1111-1111-1111-111111111111', 'DECLINE', 'Event postponed'),
-    ('76543210-7654-7654-7654-765432109876', '34567890-3456-3456-3456-345678901234', '33333333-3333-3333-3333-333333333333', 'PENDING', 'Awaiting approval');
+INSERT INTO transaction_logs (transaction_log_id, transaction_id, approved_by, approval_status, description,
+                              created_at, updated_at)
+VALUES ('7e4ff2e8-c7b9-42c4-8c9f-0402c0d7e5ac', 'd2a208f0-098b-4365-a80a-471b9dbcc905',
+        '49ae1326-0ef3-4d51-901c-b1a070c875a5', 'ACCEPT', 'Reservation approved', '2023-12-06 15:25:54.128046',
+        '2024-03-06 15:25:54.128046'),
+       ('daedc09d-6058-4431-a0ab-ee84d4abea42', 'ce437b1d-439a-4ab7-a1aa-4b096445b07b',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'ACCEPT for meeting with clients',
+        '2024-03-06 19:14:21.726247', '2024-03-08 17:02:48.015754'),
+       ('8050a02e-a55f-40b5-ad79-b979c9164f32', 'f16d5a77-3f51-4592-b57f-f466c36a9801',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'meeting with clients', '2024-03-07 16:41:19.416786',
+        '2024-03-08 16:41:34.711641'),
+       ('6ce637dd-05f1-43fc-89ca-b030f60446c1', '7c632f73-52ac-4a79-8114-acc163002831',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'VVIP meeting', '2024-03-08 23:16:25.011953',
+        '2024-03-08 23:19:24.000649'),
+       ('1d3d5c39-930e-4abb-9270-923f3166ec5f', 'ea5a94ff-4ead-41bf-8022-774d30418866',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'ACCEPT for meeting with new client',
+        '2024-03-09 03:05:18.164471', '2024-03-09 03:13:21.61203'),
+       ('b73ec4cd-8103-4f9d-ad9a-1d4594038f97', '3581ecc2-8222-46ef-aeba-3953749a5d7e',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'VVIP meeting', '2024-03-10 22:50:12.356702',
+        '2024-03-10 22:51:35.080269'),
+       ('f749f706-fd2c-40a4-80f3-160d822914dc', 'c8f72c63-4182-4ec5-9fcb-d9219a19d409',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'acc aja lah', '2024-03-10 22:31:33.769856',
+        '2024-03-10 23:08:48.018281'),
+       ('680b51a4-ec14-4830-ac96-d0f98a58ea5d', '99708bde-50ea-4b53-a1ee-aa617e8c3abc',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'acc aja lah', '2024-03-10 22:32:49.904358',
+        '2024-03-10 23:10:30.940165'),
+       ('e5a325b0-96da-4a8c-9ff0-00d53b6f0e01', '40ab1661-2871-4d20-bc4b-78e2d5d8d102',
+        '49ae1326-0ef3-4d51-901c-b1a070c875a5', 'DECLINE', 'Decline, room already used\n', '2024-01-06 15:25:54.128046',
+        '2024-03-06 15:25:54.128046'),
+       ('200e206c-d02f-499a-8cfd-b66b138415b4', 'd3e55284-a3a2-4fe6-83c5-ed4d27791218',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'VVIP meeting', '2024-03-10 22:29:50.833956',
+        '2024-03-11 02:07:14.375345'),
+       ('4b06398e-c835-4feb-97e4-277d0a587bfe', '1dc23aea-2061-4802-b500-733d52bf3b3a',
+        'ca35dd2a-aed1-43ab-8ae2-04aec5490fcd', 'ACCEPT', 'VVIP meeting', '2024-03-13 09:59:56.966286',
+        '2024-03-13 10:01:00.019405');

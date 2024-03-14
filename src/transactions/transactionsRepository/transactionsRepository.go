@@ -22,7 +22,22 @@ func (t transactionsRepository) RetrieveAllTransactions(page int, pageSize int, 
 	offset := (page - 1) * pageSize
 	limit := pageSize
 
-	query := `SELECT transaction_id, employee_id, room_id, start_date, end_date, description, status, created_at, updated_at FROM transactions WHERE created_at BETWEEN $1 and $2 LIMIT $3 OFFSET $4`
+	query := `SELECT
+	  transaction_id,
+	  employee_id,
+	  room_id,
+	  start_date,
+	  end_date,
+	  description,
+	  status,
+	  created_at,
+	  updated_at
+	FROM
+	  transactions
+	WHERE
+	  created_at BETWEEN $1 AND $2
+	LIMIT
+	  $3 OFFSET $4`
 
 	rows, err := t.db.Query(query, startDate, endDate, limit, offset)
 	if err != nil {
@@ -52,7 +67,12 @@ func (t transactionsRepository) RetrieveAllTransactions(page int, pageSize int, 
 func (t transactionsRepository) CountAllTransactions(startDate string, endDate string) (int, error) {
 	var count int
 
-	query := `SELECT COUNT(*) FROM transactions WHERE created_at BETWEEN $1 AND $2`
+	query := `SELECT
+	  COUNT(*)
+	FROM
+	  transactions
+	WHERE
+	  created_at BETWEEN $1 AND $2`
 
 	rows := t.db.QueryRow(query, startDate, endDate)
 	err := rows.Scan(&count)
@@ -67,35 +87,35 @@ func (t transactionsRepository) RetrieveTransactionsByID(trxID string) (transact
 	var trxDetails transactionsDto.TransactionsDetailResponse
 
 	query := `SELECT 
-    t.transaction_id,
-    e.employee_id,
-    e.full_name AS employee_name,
-    e.division AS department,
-    e.phone_number,
-    e.position,
-    r.room_id,
-    r.name AS room_name,
-    rd.room_details_id,
-    rd.room_type,
-    rd.capacity,
-    rd.facility,
-    r.status AS room_status,
-    t.start_date,
-    t.end_date,
-    t.description,
-    t.status AS transaction_status,
-    t.created_at,
-    t.updated_at
-FROM 
-    transactions t
-JOIN 
-    employee e ON t.employee_id = e.employee_id
-JOIN 
-    room r ON t.room_id = r.room_id
-JOIN 
-    room_details rd ON r.room_details_id = rd.room_details_id
-WHERE
-    t.transaction_id = $1`
+		t.transaction_id,
+		e.employee_id,
+		e.full_name AS employee_name,
+		e.division AS department,
+		e.phone_number,
+		e.position,
+		r.room_id,
+		r.name AS room_name,
+		rd.room_details_id,
+		rd.room_type,
+		rd.capacity,
+		rd.facility,
+		r.status AS room_status,
+		t.start_date,
+		t.end_date,
+		t.description,
+		t.status AS transaction_status,
+		t.created_at,
+		t.updated_at
+	FROM 
+		transactions t
+	JOIN 
+		employee e ON t.employee_id = e.employee_id
+	JOIN 
+		room r ON t.room_id = r.room_id
+	JOIN 
+		room_details rd ON r.room_details_id = rd.room_details_id
+	WHERE
+		t.transaction_id = $1`
 
 	err := t.db.QueryRow(query, trxID).Scan(
 		&trxDetails.ID,
@@ -143,9 +163,18 @@ func (t transactionsRepository) CreateTransactions(trx transactionsDto.CreateTra
 		err = tx.Commit()
 	}()
 
-	// insert transactions
-	query := `INSERT INTO transactions (transaction_id, employee_id, room_id, start_date, end_date, description, status)
-        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING transaction_id`
+	query := `INSERT INTO
+	  transactions (
+		transaction_id,
+		employee_id,
+		room_id,
+		start_date,
+		end_date,
+		description,
+		status
+	  )
+	VALUES
+	  ($1, $2, $3, $4, $5, $6, $7) RETURNING transaction_id`
 
 	var transactionID string
 	err = tx.QueryRow(query, trx.ID, trx.EmployeeId, trx.RoomId, trx.StartDate, trx.EndDate, trx.Description, trx.Status).Scan(&transactionID)
@@ -153,8 +182,14 @@ func (t transactionsRepository) CreateTransactions(trx transactionsDto.CreateTra
 		return err
 	}
 
-	// insert transactions log
-	qry := `INSERT INTO transaction_logs (transaction_log_id, transaction_id, approval_status) VALUES ($1, $2, $3)`
+	qry := `INSERT INTO
+	  transaction_logs (
+		transaction_log_id,
+		transaction_id,
+		approval_status
+	  )
+	VALUES
+	  ($1, $2, $3)`
 
 	_, err = tx.Exec(qry, trx.TransactionsLogsID, transactionID, trx.Status)
 	if err != nil {
@@ -165,7 +200,15 @@ func (t transactionsRepository) CreateTransactions(trx transactionsDto.CreateTra
 }
 
 func (t transactionsRepository) RetrieveRoomByID(roomID string) (transactionsDto.RoomResponse, error) {
-	query := `SELECT room_id, room_details_id, name, status FROM room WHERE room_id = $1`
+	query := `SELECT
+	  room_id,
+	  room_details_id,
+	  name,
+	  status
+	FROM
+	  room
+	WHERE
+	  room_id = $1`
 
 	var room transactionsDto.RoomResponse
 	err := t.db.QueryRow(query, roomID).Scan(&room.ID, &room.RoomDetails, &room.Name, &room.Status)
@@ -194,46 +237,40 @@ func (t transactionsRepository) UpdateTrxLog(trxLog transactionsDto.TransactionL
 		err = tx.Commit()
 	}()
 
-	// Update transaction logs
-	trxLogQuery := `
-        UPDATE transaction_logs 
-        SET 
-            approved_by = $1,
-            approval_status = $2,
-            description = $3,
-            updated_at = CURRENT_TIMESTAMP 
-        WHERE 
-            transaction_log_id = $4
-    `
+	trxLogQuery := `UPDATE
+	  transaction_logs
+	SET
+	  approved_by = $1,
+	  approval_status = $2,
+	  description = $3,
+	  updated_at = CURRENT_TIMESTAMP
+	WHERE
+	  transaction_log_id = $4`
 
 	_, err = tx.Exec(trxLogQuery, trxLog.ApprovedBy, trxLog.ApprovalStatus, trxLog.Descriptions, trxLog.TransactionLogID)
 	if err != nil {
 		return err
 	}
 
-	// Update transactions
-	trxQuery := `
-        UPDATE transactions 
-        SET 
-            status = $1,
-            updated_at = CURRENT_TIMESTAMP 
-        WHERE 
-            transaction_id = $2
-    `
+	trxQuery := `UPDATE
+	  transactions
+	SET
+	  status = $1,
+	  updated_at = CURRENT_TIMESTAMP
+	WHERE
+	  transaction_id = $2`
 
 	_, err = tx.Exec(trxQuery, trxLog.ApprovalStatus, trxLog.TransactionsID)
 	if err != nil {
 		return err
 	}
 
-	// Update status room to booked
-	roomQuery := `
-        UPDATE room
-        SET
-            status = 'BOOKED'
-        WHERE
-            room_id = $1
-    `
+	roomQuery := `UPDATE
+	  room
+	SET
+	  status = 'BOOKED'
+	WHERE
+	  room_id = $1`
 
 	_, err = tx.Exec(roomQuery, trxLog.RoomsID)
 	if err != nil {
@@ -335,7 +372,13 @@ func (t transactionsRepository) RetrieveTrxLogDetailsByID(trxLogID string) (tran
 }
 
 func (t transactionsRepository) RetrieveTrxLogByID(trxLogID string) (transactionsDto.TransactionLogs, error) {
-	query := `SELECT transaction_log_id, transaction_id FROM transaction_logs WHERE transaction_log_id = $1`
+	query := `SELECT
+	  transaction_log_id,
+	  transaction_id
+	FROM
+	  transaction_logs
+	WHERE
+	  transaction_log_id = $1`
 
 	var trxLog transactionsDto.TransactionLogs
 	err := t.db.QueryRow(query, trxLogID).Scan(&trxLog.TransactionLogID, &trxLog.TransactionsID)
@@ -354,13 +397,27 @@ func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startD
 	offset := (page - 1) * pageSize
 	limit := pageSize
 
-	query := `
-    SELECT tl.transaction_log_id, tl.transaction_id, COALESCE(e.full_name, 'pending for approval') AS approved_by, tl.approval_status, COALESCE(tl.description, 'pending for approval') AS description, tl.created_at, tl.updated_at
-    FROM transaction_logs tl
-    LEFT JOIN employee e ON tl.approved_by = e.employee_id
-    WHERE tl.created_at BETWEEN $1 AND $2
-    LIMIT $3 OFFSET $4
-    `
+	query := `SELECT
+	  tl.transaction_log_id,
+	  tl.transaction_id,
+	  COALESCE(
+		e.full_name,
+		'pending for approval'
+	  ) AS approved_by,
+	  tl.approval_status,
+	  COALESCE(
+		tl.description,
+		'pending for approval'
+	  ) AS description,
+	  tl.created_at,
+	  tl.updated_at
+	FROM
+	  transaction_logs tl
+	  LEFT JOIN employee e ON tl.approved_by = e.employee_id
+	WHERE
+	  tl.created_at BETWEEN $1 AND $2
+	LIMIT
+	  $3 OFFSET $4`
 
 	rows, err := t.db.Query(query, startDate, endDate, limit, offset)
 	if err != nil {
@@ -390,7 +447,12 @@ func (t transactionsRepository) RetrieveAllTrxLog(page int, pageSize int, startD
 func (t transactionsRepository) CountAllTrxLogs(startDate string, endDate string) (int, error) {
 	var count int
 
-	query := `SELECT COUNT(*) FROM transaction_logs WHERE created_at BETWEEN $1 AND $2`
+	query := `SELECT
+	  COUNT(*)
+	FROM
+	  transaction_logs
+	WHERE
+	  created_at BETWEEN $1 AND $2`
 
 	rows := t.db.QueryRow(query, startDate, endDate)
 	err := rows.Scan(&count)

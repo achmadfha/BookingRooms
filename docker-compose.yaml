@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   booking-rooms:
     build: .
@@ -10,17 +11,20 @@ services:
       - bookingrooms_net
     depends_on:
       - db
+
   db:
     image: postgres:alpine
     environment:
-      - POSTGRES_PASSWORD=StrongPassword123!
-      - POSTGRES_DB=booking-roomsdb
+      POSTGRES_PASSWORD: StrongPassword123!
+      POSTGRES_DB: booking-roomsdb
     volumes:
       - booking-rooms-backup:/var/lib/postgresql/data
     networks:
       - bookingrooms_net
+
 volumes:
   booking-rooms-backup:
+
 networks:
   bookingrooms_net:
     driver: bridge
